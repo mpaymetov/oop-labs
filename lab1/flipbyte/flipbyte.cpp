@@ -8,11 +8,12 @@ uint8_t FlipByte(uint8_t byte)
 	uint8_t outputByte = 0;
 	uint8_t inputByte = byte;
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 	{
+		outputByte <<= 1; 
 		outputByte = inputByte & 0x01 | outputByte;
 		inputByte >>= 1;
-		outputByte <<= 1;
+		
 	}
 
 	return outputByte;
