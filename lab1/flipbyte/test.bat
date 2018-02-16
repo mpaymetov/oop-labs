@@ -13,7 +13,7 @@ if NOT ERRORLEVEL 1 GOTO err
 if ERRORLEVEL 1 GOTO err
 
 echo OK
-exit 0
+exit /B 0
 
 :err
 echo Program testing failed
