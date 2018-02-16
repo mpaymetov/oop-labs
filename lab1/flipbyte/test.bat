@@ -1,11 +1,14 @@
 set PROGRAM="%~1"
 
 %PROGRAM% > nul
-
-rem 
 if NOT ERRORLEVEL 1 GOTO err
 
-rem
+%PROGRAM% 256
+if NOT ERRORLEVEL 1 GOTO err
+
+%PROGRAM% Hello
+if NOT ERRORLEVEL 1 GOTO err
+
 %PROGRAM% 6
 if ERRORLEVEL 1 GOTO err
 
