@@ -1,8 +1,10 @@
 set PROGRAM="%~1"
 
 %PROGRAM%
+if NOT ERRORLEVEL 1 GOTO err
 
 rem 
+%PROGRAM% matrix.txt
 if NOT ERRORLEVEL 1 GOTO err
 
 rem 
