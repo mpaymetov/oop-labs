@@ -31,7 +31,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="matrix.txt">
+    <Text Include="matrix_in1.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="matrix_in2.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="matrix_out_et1.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="matrix_out_et2.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
   </ItemGroup>
