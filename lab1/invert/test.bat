@@ -8,6 +8,14 @@ rem
 if NOT ERRORLEVEL 1 GOTO err
 
 rem 
+%PROGRAM% matrix_er1.txt
+if NOT ERRORLEVEL 1 GOTO err
+
+rem 
+%PROGRAM% matrix_er2.txt
+if NOT ERRORLEVEL 1 GOTO err
+
+rem 
 %PROGRAM% matrix_in1.txt > matrix_out_1.txt
 if ERRORLEVEL 1 GOTO err
 fc.exe matrix_out_1.txt matrix_out_et1.txt > nul
