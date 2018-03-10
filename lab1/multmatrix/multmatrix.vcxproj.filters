@@ -48,11 +48,5 @@
     <Text Include="matrix_in2.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
-    <Text Include="matrix_out.txt">
-      <Filter>Исходные файлы</Filter>
-    </Text>
-    <Text Include="matrix_out_et.txt">
-      <Filter>Исходные файлы</Filter>
-    </Text>
   </ItemGroup>
 </Project>

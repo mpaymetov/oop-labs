@@ -179,8 +179,6 @@
     <Text Include="matrix_er2.txt" />
     <Text Include="matrix_in1.txt" />
     <Text Include="matrix_in2.txt" />
-    <Text Include="matrix_out.txt" />
-    <Text Include="matrix_out_et.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
