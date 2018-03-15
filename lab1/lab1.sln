@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rotatebyte", "rotatebyte\ro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calcbits", "calcbits\calcbits.vcxproj", "{F9198BA7-BE24-4FE2-BFE3-7E3062F2BEF6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "copyfile", "copyfile\copyfile.vcxproj", "{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{F9198BA7-BE24-4FE2-BFE3-7E3062F2BEF6}.Release|x64.Build.0 = Release|x64
 		{F9198BA7-BE24-4FE2-BFE3-7E3062F2BEF6}.Release|x86.ActiveCfg = Release|Win32
 		{F9198BA7-BE24-4FE2-BFE3-7E3062F2BEF6}.Release|x86.Build.0 = Release|Win32
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Debug|x64.ActiveCfg = Debug|x64
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Debug|x64.Build.0 = Debug|x64
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Debug|x86.ActiveCfg = Debug|Win32
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Debug|x86.Build.0 = Debug|Win32
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Release|x64.ActiveCfg = Release|x64
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Release|x64.Build.0 = Release|x64
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Release|x86.ActiveCfg = Release|Win32
+		{91B619D4-9D83-4CB9-B6F9-DAE4A91A2C46}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
