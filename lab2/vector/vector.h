@@ -1,7 +1,10 @@
 #pragma once
 
-void ReadVector(std::istream &input, std::vector<float> number);
+void ReadVector(std::istream &input, std::vector<double> &number);
 
-void ProcessVector(std::vector<float> &numbers);
+void ProcessVector(std::vector<double> &number);
 
-void PrintVector(std::ostream &output, const std::vector<float> &numbers);
+void SortVector(std::vector<double> &number);
+
+void PrintVector(std::ostream &output, const std::vector<double> &number);
+

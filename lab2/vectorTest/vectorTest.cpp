@@ -6,28 +6,35 @@
 #include <iostream>
 #include <iomanip>
 
-bool IsEqually(const std::vector <float>& array1, const std::vector <float>& array2)
+bool IsEqually(const std::vector <double>& array1, const std::vector <double>& array2)
 {
 	return array1 == array2;
 }
 
 TEST_CASE("input - empty vector, output - empty vector")
 {
-	std::vector<float> number = {};
+	std::vector<double> number = {};
 	ProcessVector(number);
 	REQUIRE(IsEqually(number, {}));
 }
 
 TEST_CASE("input - not empty vector, output - not empty vector")
 {
-	std::vector<float> number = {2, 2, 4};
+	std::vector<double> number = {2, 2, 4};
 	ProcessVector(number);
 	REQUIRE(IsEqually(number, {1, 1, 2}));
 }
 
 TEST_CASE("input - maximum is 0, output - not change")
 {
-	std::vector<float> number = { -2, 0, -4 };
+	std::vector<double> number = { -4, -2, 0 };
 	ProcessVector(number);
-	REQUIRE(IsEqually(number, { -2, 0, -4 }));
+	REQUIRE(IsEqually(number, { -4, -2, 0 }));
+}
+
+TEST_CASE("input - not empty vector, output - sorted")
+{
+	std::vector<double> number = { 4, 1, 2 };
+	ProcessVector(number);
+	REQUIRE(IsEqually(number, { 0.5, 1, 2 }));
 }
