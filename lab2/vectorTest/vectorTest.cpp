@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "../vector/vector.h"
+
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -32,9 +33,3 @@ TEST_CASE("input - maximum is 0, output - not change")
 	REQUIRE(IsEqually(number, { -4, -2, 0 }));
 }
 
-TEST_CASE("input - not empty vector, output - sorted")
-{
-	std::vector<double> number = { 4, 1, 2 };
-	ProcessVector(number);
-	REQUIRE(IsEqually(number, { 0.5, 1, 2 }));
-}
