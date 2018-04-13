@@ -12,21 +12,21 @@ bool IsEqually(const std::vector <double>& array1, const std::vector <double>& a
 	return array1 == array2;
 }
 
-TEST_CASE("input - empty vector, output - empty vector")
+TEST_CASE("ProcessVector produces empty vector from empty vector")
 {
 	std::vector<double> number = {};
 	ProcessVector(number);
 	REQUIRE(IsEqually(number, {}));
 }
 
-TEST_CASE("input - not empty vector, output - not empty vector")
+TEST_CASE("ProcessVector divides each element by half of the maximum element")
 {
 	std::vector<double> number = {2, 2, 4};
 	ProcessVector(number);
 	REQUIRE(IsEqually(number, {1, 1, 2}));
 }
 
-TEST_CASE("input - maximum is 0, output - not change")
+TEST_CASE("ProcessVector does not change vector if the maximum element is 0")
 {
 	std::vector<double> number = { -4, -2, 0 };
 	ProcessVector(number);
