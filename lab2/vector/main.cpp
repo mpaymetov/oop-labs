@@ -6,8 +6,7 @@
 
 int main()
 {
-	std::vector<double> number;
-	ReadVector(std::cin, number);
+	std::vector<double> number = ReadVector(std::cin);
 	ProcessVector(number);
 	std::sort(number.begin(), number.end()); 
 	PrintVector(std::cout, number);
