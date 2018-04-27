@@ -17,8 +17,6 @@ int main(int argc, char* argv[])
 		std::cout << "Usage: PrimeNumbers.exe <upperBound 1..10^8>\n";
 		return 1;
 	}
-	
-	
 
 	std::set<int> primeNumbersSet = GeneratePrimeNumbersSet(upperBound);
 	std::cout << "to " << upperBound << " contains " << primeNumbersSet.size() << " prime numbers\n";
