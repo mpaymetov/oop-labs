@@ -27,9 +27,7 @@ int main(int argc, char* argv[])
 	}
 
 	std::set<int> primeNumbersSet = {};
-	#ifndef _DEBUG
-		primeNumbersSet = GeneratePrimeNumbersSet(upperBound);
-	#endif
+	primeNumbersSet = GeneratePrimeNumbersSet(upperBound);
 	std::cout << "to " << upperBound << " contains " << primeNumbersSet.size() << " prime numbers:\n";
 	PrintPrimeNumbers(primeNumbersSet);
 	return 0;
