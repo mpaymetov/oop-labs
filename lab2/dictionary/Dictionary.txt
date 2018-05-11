@@ -1,4 +1,6 @@
-cat
-koshka
 car
-avtomobil`
+автомобиль
+cat
+кошка
+cat
+кот
