@@ -98,7 +98,13 @@ bool CCar::SetGear(int gear)
 		break;
 	}
 
-	if ((l_gear == Gear::FIRST) || (l_gear == Gear::REVERSE))
+	if (!m_isEngineOn)
+	{
+		m_error = Error::ENGINE_IS_OFF;
+		return false;
+	}
+
+	if (l_gear == Gear::REVERSE)
 	{
 		if (m_speed == 0)
 		{
@@ -106,28 +112,42 @@ bool CCar::SetGear(int gear)
 			m_error = Error::NO_ERROR;
 			return true;
 		}
-	}
-	else
-	{
-		if (IsSpeedCorrectForGear(m_speed, m_speed, l_gear))
+		else
 		{
-			m_gear = l_gear;
-			m_error = Error::NO_ERROR;
-			return true;
+			m_error = Error::NO_ZERO_SPEED;
+			return false;
 		}
 	}
+	else if (l_gear == Gear::NEUTRAL)
+	{
+		m_gear = l_gear;
+		m_error = Error::NO_ERROR;
+		return true;
+	}
+	else if (m_direction == Direction::BACK)
+	{
+		m_error = Error::DIRECTION_NOT_CORRECT;
+		return false;
+	}
+	else if (IsSpeedCorrectForGear(m_speed, m_speed, l_gear))
+	{
+		m_gear = l_gear;
+		m_error = Error::NO_ERROR;
+		return true;
+	}
+	
 	return false;
 }
 
 bool CCar::SetSpeed(unsigned int speed)
 {
-	if (IsSpeedCorrectForGear(speed, m_speed, m_gear))
+	if (m_isEngineOn && IsSpeedCorrectForGear(speed, m_speed, m_gear))
 	{
 		m_speed = speed;
 		m_error = Error::NO_ERROR;
 		if (speed > 0)
 		{
-			if (m_gear == Gear::REVERSE)
+			if ((m_gear == Gear::REVERSE) || (m_direction == Direction::BACK))
 			{
 				m_direction = Direction::BACK;
 			}

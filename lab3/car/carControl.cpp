@@ -22,6 +22,8 @@ std::string ConvertErrorToString(const Error &error)
 		return "Speed is not correct for gear";
 	case Error::ONLY_REDUCE_THE_SPEED:
 		return "Speed can only be reduced";
+	case Error::DIRECTION_NOT_CORRECT:
+		return "Direction not correct for gear";
 	case Error::SPEED_IS_NOT_CORRECT_FOR_REVERSE_GEAR:
 		return "the speed can be from 0 to 20";
 	case Error::SPEED_IS_NOT_CORRECT_FOR_FIRST_GEAR:

@@ -24,6 +24,9 @@
     <ClInclude Include="..\car\car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\car\carControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\car\car.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\car\carControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="carControlTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
