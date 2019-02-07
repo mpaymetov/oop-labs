@@ -1,15 +1,18 @@
 set PROGRAM="%~1"
 
-%PROGRAM%
+%PROGRAM% > nul
 if NOT ERRORLEVEL 1 GOTO err
 
-%PROGRAM% recrypt input.txt output.txt 20
+%PROGRAM% recrypt input.txt output.txt 20 > nul
 if NOT ERRORLEVEL 1 GOTO err
 
-%PROGRAM% crypt input.txt output.txt 20
+%PROGRAM% crypt input.txt output.txt 283 > nul
+if NOT ERRORLEVEL 1 GOTO err
+
+%PROGRAM% crypt input.txt output.txt 20 > nul
 if ERRORLEVEL 1 GOTO err
 
-%PROGRAM% decrypt output.txt decrypt.txt 20
+%PROGRAM% decrypt output.txt decrypt.txt 20 > nul
 if ERRORLEVEL 1 GOTO err
 
 fc.exe input.txt decrypt.txt > nul
