@@ -6,6 +6,11 @@
 std::string ReplaceString(const std::string& subject,
 	const std::string& searchString, const std::string& replacementString)
 {
+	if (searchString == "")
+	{
+		return subject;
+	}
+
 	size_t pos = 0;
 	std::string result;
 	while (pos < subject.length())
