@@ -7,14 +7,15 @@ std::string ReplaceString(const std::string& subject,
 	const std::string& searchString, const std::string& replacementString)
 {
 	size_t pos = 0;
-	std::string result = subject;
-	while (pos < result.length())
+	std::string result;
+	while (pos < subject.length())
 	{
-		size_t foundPos = result.find(searchString, pos);		
+		size_t foundPos = subject.find(searchString, pos);
+		result.append(subject, pos, foundPos - pos);
 		if (foundPos != std::string::npos) 
 		{
-			result.replace(foundPos, searchString.length(), replacementString);
-			pos = foundPos + replacementString.length();
+			result.append(replacementString);
+			pos = foundPos + searchString.length();
 		}
 		else
 		{
@@ -24,8 +25,7 @@ std::string ReplaceString(const std::string& subject,
 	return result;
 }
 
-void CopyFileWithReplace(std::istream& input, std::ostream& output,
-	const std::string& searchString, const std::string& replacementString)
+void CopyFileWithReplace(std::istream& input, std::ostream& output, const std::string& searchString, const std::string& replacementString)
 {
 	std::string line;
 
@@ -33,6 +33,33 @@ void CopyFileWithReplace(std::istream& input, std::ostream& output,
 	{
 		output << ReplaceString(line, searchString, replacementString) << "\n";
 	}
+}
+
+bool CopyFileWithReplace(const std::string& inputFileName, const std::string& outputFileName, const std::string& searchString, const std::string& replacementString)
+{
+	std::ifstream inputFile;
+	inputFile.open(inputFileName);
+	if (!inputFile.is_open())
+	{
+		std::cout << "Can not open input file\n";
+		return false;
+	}
+	
+	std::ofstream outputFile;
+	outputFile.open(outputFileName);
+	if (!outputFile.is_open())
+	{
+		std::cout << "Can not open output file\n";
+		return false;
+	}
+
+	CopyFileWithReplace(inputFile, outputFile, searchString, replacementString);
+	if (!outputFile.flush())
+	{
+		return false;
+	}
+
+	return true;
 }
 
 int main(int argc, char* argv[])
@@ -44,17 +71,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	std::ifstream inputFile;
-	inputFile.open(argv[1]);
-
-	std::ofstream outputFile;
-	outputFile.open(argv[2]);
-
+	std::string inputFileName = argv[1];
+	std::string outputFileName = argv[2];
 	std::string search = argv[3];
 	std::string replace = argv[4];
 
-	CopyFileWithReplace(inputFile, outputFile, search, replace);
-	outputFile.flush();
+	if (!CopyFileWithReplace(inputFileName, outputFileName, search, replace))
+	{
+		return 1;
+	}
 
 	return 0;
 }

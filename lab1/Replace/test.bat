@@ -8,6 +8,14 @@ rem При запуске без параметров ожидается ненулевой код возврата
 %PROGRAM% > nul
 if NOT ERRORLEVEL 1 goto err
 
+rem При запуске с неправильными параметрами ожидается ненулевой код возврата
+%PROGRAM% test-data\fox22.txt "%TEMP%\fox.txt" bird cat > nul
+if NOT ERRORLEVEL 1 goto err
+
+rem При запуске с неправильными параметрами ожидается ненулевой код возврата
+%PROGRAM% test-data\fox.txt "%TEMP%\fox*.txt" bird cat > nul
+if NOT ERRORLEVEL 1 goto err
+
 rem При запуске с правильными параметрами ожидается нулевой код возврата
 %PROGRAM% test-data\fox.txt "%TEMP%\fox.txt" bird cat
 if ERRORLEVEL 1 goto err
@@ -17,7 +25,7 @@ if ERRORLEVEL 1 goto err
 rem При запуске с правильными параметрами ожидается нулевой код возврата
 %PROGRAM% test-data\fox.txt "%TEMP%\fox.txt" dog cat
 if ERRORLEVEL 1 goto err
-fc.exe "%TEMP%\fox.txt" test-data\fox-replace-dog-with-cat.txt
+fc.exe "%TEMP%\fox.txt" test-data\fox-replace-dog-with-cat.txt >nul
 if ERRORLEVEL 1 goto err
 
 echo OK
