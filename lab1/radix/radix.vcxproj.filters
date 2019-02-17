@@ -45,5 +45,11 @@
     <Text Include="out2.txt">
       <Filter>test_data</Filter>
     </Text>
+    <Text Include="maxint.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="m43.txt">
+      <Filter>test_data</Filter>
+    </Text>
   </ItemGroup>
 </Project>

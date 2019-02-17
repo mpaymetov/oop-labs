@@ -175,8 +175,10 @@
     <None Include="test.bat" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="m43.txt" />
     <Text Include="out.txt" />
     <Text Include="out2.txt" />
+    <Text Include="maxint.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
