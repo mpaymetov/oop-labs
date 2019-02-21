@@ -50,7 +50,8 @@ if ERRORLEVEL 1 goto err
 fc %OUT% "mumaxint.txt" > nul
 if ERRORLEVEL 1 goto err
 
-%PROGRAM% 16 10 FFFFFFFF1 > %OUT%
+::argument out of range
+%PROGRAM% 10 16 4294967296 > %OUT%
 if NOT ERRORLEVEL 1 goto err
 
 %PROGRAM% 10 8 -35 > %OUT%
