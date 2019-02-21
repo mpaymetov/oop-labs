@@ -176,9 +176,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="m43.txt" />
+    <Text Include="mumaxint.txt" />
     <Text Include="out.txt" />
     <Text Include="out2.txt" />
-    <Text Include="maxint.txt" />
+    <Text Include="umaxint.txt" />
+    <Text Include="out3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

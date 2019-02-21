@@ -45,10 +45,16 @@
     <Text Include="out2.txt">
       <Filter>test_data</Filter>
     </Text>
-    <Text Include="maxint.txt">
+    <Text Include="m43.txt">
       <Filter>test_data</Filter>
     </Text>
-    <Text Include="m43.txt">
+    <Text Include="out3.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="umaxint.txt">
+      <Filter>test_data</Filter>
+    </Text>
+    <Text Include="mumaxint.txt">
       <Filter>test_data</Filter>
     </Text>
   </ItemGroup>
