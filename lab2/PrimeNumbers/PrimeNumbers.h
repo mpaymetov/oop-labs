@@ -1,6 +1,6 @@
 #pragma once
 
-bool GetNumber(const std::string &str, int& number);
+bool GetNumber(const std::string &str, int& number, std::string& error);
 
 std::vector<bool> GenerateIsPrimeVector(int upperBound);
 

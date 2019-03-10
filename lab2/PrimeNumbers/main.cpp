@@ -11,9 +11,10 @@ int main(int argc, char* argv[])
 	}
 
 	int upperBound = 0;
-	if (!GetNumber(argv[1], upperBound))
+	std::string errorMsg;
+	if (!GetNumber(argv[1], upperBound, errorMsg))
 	{
-		std::cout << "Invalid argument.\n";
+		std::cout << errorMsg << "\n";
 		std::cout << "Usage: PrimeNumbers.exe <upperBound 1..10^8>\n";
 		return 1;
 	}
