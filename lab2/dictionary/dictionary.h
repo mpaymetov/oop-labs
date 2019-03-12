@@ -1,12 +1,22 @@
 #pragma once
 
-typedef std::multimap<std::string, std::string> DictionaryType;
+typedef std::multimap<std::string, std::string> DictionaryMap;
 
-void InsertToDyctionary(DictionaryType &dyctionary, DictionaryType &reverseDyctionary, const std::string &word, const std::string &translation);
+struct Dictionary
+{
+	DictionaryMap forward;
+	DictionaryMap reverse;
+};
 
-bool FindInDyctionary(DictionaryType &dyctionary, DictionaryType &reverseDyctionary, const std::string &originalWord, std::string &translation);
+void InsertToDictionary(Dictionary& dictionary, const std::string& originalWord, const std::string& translation);
 
-void ReadDyctionaryFromFile(const std::string &inputFileName, DictionaryType &dyctionary, DictionaryType &reverseDyctionary);
+bool FindInDictionary(Dictionary& dictionary, const std::string& originalWord, std::string& translation);
 
-void SaveDyctionaryToFile(const std::string &outputFileName, DictionaryType &dyctionary);
+void ReadDictionaryFromStream(std::istream& input, Dictionary& dictionary);
+
+void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictionary);
+
+void SaveDictionaryToStream(std::ostream& output, Dictionary& dictionary);
+
+void SaveDictionaryToFile(const std::string& outputFileName, Dictionary& dictionary);
 

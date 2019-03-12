@@ -1,41 +1,47 @@
 #include "stdafx.h"
+#include "dictionary.h"
 
-typedef std::multimap<std::string, std::string> DictionaryType;
-
-void InsertToDyctionary(DictionaryType &dyctionary, DictionaryType &reverseDyctionary, const std::string &originalWord, const std::string &translation)
+void InsertToDictionary(Dictionary& dictionary, const std::string& originalWord, const std::string& translation)
 {
-	dyctionary.insert(std::pair<std::string, std::string>(originalWord, translation));
-	reverseDyctionary.insert(std::pair<std::string, std::string>(translation, originalWord));
+	dictionary.forward.insert(std::pair<std::string, std::string>(originalWord, translation));
+	dictionary.reverse.insert(std::pair<std::string, std::string>(translation, originalWord));
 }
 
-bool FindInDyctionary(DictionaryType &dyctionary, DictionaryType &reverseDyctionary, const std::string &originalWord, std::string &translation)
+bool FindInDictionary(Dictionary& dictionary, const std::string& originalWord, std::string& translation)
 {
 	translation = "";
-	if (dyctionary.find(originalWord) != dyctionary.end())
+	for (DictionaryMap::iterator it = dictionary.forward.equal_range(originalWord).first; it != dictionary.forward.equal_range(originalWord).second; ++it)
 	{
-		DictionaryType::iterator it;
-		for (it = dyctionary.equal_range(originalWord).first; it != dyctionary.equal_range(originalWord).second; ++it)
-		{
-			translation += it->second + " ";
-		}
-		return true;
+		translation += it->second + " ";
 	}
-	else if (reverseDyctionary.find(originalWord) != reverseDyctionary.end())
+	for (DictionaryMap::iterator it = dictionary.reverse.equal_range(originalWord).first; it != dictionary.reverse.equal_range(originalWord).second; ++it)
 	{
-		DictionaryType::iterator it;
-		for (it = reverseDyctionary.equal_range(originalWord).first; it != reverseDyctionary.equal_range(originalWord).second; ++it)
-		{
-			translation += it->second + " ";
-		}
-		return true;
+		translation += it->second + " ";
 	}
-	else
+
+	if (translation == "")
 	{
 		return false;
 	}
+	return true;
 }
 
-void ReadDyctionaryFromFile(const std::string &inputFileName, DictionaryType &dyctionary, DictionaryType &reverseDyctionary)
+void ReadDictionaryFromStream(std::istream& input, Dictionary& dictionary)
+{
+	std::string word, translation;
+	while (!input.eof())
+	{
+		std::getline(input, word);
+		if (!input.eof())
+		{
+			std::getline(input, translation);
+			InsertToDictionary(dictionary, word, translation);
+		}
+	}
+	return;
+}
+
+void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictionary)
 {
 	std::ifstream inputFile;
 	inputFile.open(inputFileName);	
@@ -44,20 +50,19 @@ void ReadDyctionaryFromFile(const std::string &inputFileName, DictionaryType &dy
 		std::cout << "Input file can`t open\n";
 		return;
 	}
-	std::string originalWord, translation;
-	while (!inputFile.eof())
-	{
-		std::getline(inputFile, originalWord);
-		if (!inputFile.eof())
-		{
-			std::getline(inputFile, translation);
-			InsertToDyctionary(dyctionary, reverseDyctionary, originalWord, translation);
-		}
-	}
-	inputFile.close();
+	ReadDictionaryFromStream(inputFile, dictionary);
+	return;
 }
 
-void SaveDyctionaryToFile(const std::string &outputFileName, DictionaryType &dyctionary)
+void SaveDictionaryToStream(std::ostream& output, Dictionary& dictionary)
+{
+	for (DictionaryMap::iterator it = dictionary.forward.begin(); it != dictionary.forward.end(); ++it)
+	{
+		output << (*it).first << std::endl << (*it).second << std::endl;
+	}
+}
+
+void SaveDictionaryToFile(const std::string &outputFileName, Dictionary& dictionary)
 {
 	std::ofstream outputFile;
 	outputFile.open(outputFileName);
@@ -66,11 +71,7 @@ void SaveDyctionaryToFile(const std::string &outputFileName, DictionaryType &dyc
 		std::cout << "Output file can`t open\n";
 		return;
 	}
-	for (DictionaryType::iterator it = dyctionary.begin(); it != dyctionary.end(); ++it)
-	{
-		outputFile << (*it).first << std::endl << (*it).second << std::endl;
-	}
+	SaveDictionaryToStream(outputFile, dictionary);
 	std::cout << "Изменения сохранены. До свидания.\n";
-	outputFile.close();
 }
 
