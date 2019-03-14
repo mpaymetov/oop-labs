@@ -1,20 +1,26 @@
 #include "stdafx.h"
 #include "dictionary.h"
 
-void InsertToDictionary(Dictionary& dictionary, const std::string& originalWord, const std::string& translation)
+void InsertToDictionary(Dictionary& dictionary, const std::string& original, const std::string& translation)
 {
-	dictionary.forward.insert(std::pair<std::string, std::string>(originalWord, translation));
-	dictionary.reverse.insert(std::pair<std::string, std::string>(translation, originalWord));
+	std::string originalWord = original;
+	std::transform(originalWord.begin(), originalWord.end(), originalWord.begin(), ::tolower);
+	std::string translationWord = translation;
+	std::transform(translationWord.begin(), translationWord.end(), translationWord.begin(), ::tolower);
+	dictionary.forward.insert(std::pair<std::string, std::string>(originalWord, translationWord));
+	dictionary.reverse.insert(std::pair<std::string, std::string>(translationWord, originalWord));
 }
 
-bool FindInDictionary(Dictionary& dictionary, const std::string& originalWord, std::string& translation)
+bool FindInDictionary(const Dictionary& dictionary, const std::string& originalWord, std::string& translation)
 {
+	std::string word = originalWord;
+	std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 	translation = "";
-	for (DictionaryMap::iterator it = dictionary.forward.equal_range(originalWord).first; it != dictionary.forward.equal_range(originalWord).second; ++it)
+	for (auto it = dictionary.forward.equal_range(word).first; it != dictionary.forward.equal_range(word).second; ++it)
 	{
 		translation += it->second + " ";
 	}
-	for (DictionaryMap::iterator it = dictionary.reverse.equal_range(originalWord).first; it != dictionary.reverse.equal_range(originalWord).second; ++it)
+	for (auto it = dictionary.reverse.equal_range(word).first; it != dictionary.reverse.equal_range(word).second; ++it)
 	{
 		translation += it->second + " ";
 	}
@@ -26,8 +32,9 @@ bool FindInDictionary(Dictionary& dictionary, const std::string& originalWord, s
 	return true;
 }
 
-void ReadDictionaryFromStream(std::istream& input, Dictionary& dictionary)
+Dictionary ReadDictionaryFromStream(std::istream& input)
 {
+	Dictionary dictionary;
 	std::string word, translation;
 	while (!input.eof())
 	{
@@ -38,7 +45,7 @@ void ReadDictionaryFromStream(std::istream& input, Dictionary& dictionary)
 			InsertToDictionary(dictionary, word, translation);
 		}
 	}
-	return;
+	return dictionary;
 }
 
 void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictionary)
@@ -50,19 +57,19 @@ void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictio
 		std::cout << "Input file can`t open\n";
 		return;
 	}
-	ReadDictionaryFromStream(inputFile, dictionary);
+	dictionary = ReadDictionaryFromStream(inputFile);
 	return;
 }
 
-void SaveDictionaryToStream(std::ostream& output, Dictionary& dictionary)
+void SaveDictionaryToStream(std::ostream& output, const Dictionary& dictionary)
 {
-	for (DictionaryMap::iterator it = dictionary.forward.begin(); it != dictionary.forward.end(); ++it)
+	for (const auto& item : dictionary.forward)
 	{
-		output << (*it).first << std::endl << (*it).second << std::endl;
+		output << item.first << std::endl << item.second << std::endl;
 	}
 }
 
-void SaveDictionaryToFile(const std::string &outputFileName, Dictionary& dictionary)
+void SaveDictionaryToFile(const std::string &outputFileName, const Dictionary& dictionary)
 {
 	std::ofstream outputFile;
 	outputFile.open(outputFileName);

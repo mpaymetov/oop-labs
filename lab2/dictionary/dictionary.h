@@ -10,13 +10,13 @@ struct Dictionary
 
 void InsertToDictionary(Dictionary& dictionary, const std::string& originalWord, const std::string& translation);
 
-bool FindInDictionary(Dictionary& dictionary, const std::string& originalWord, std::string& translation);
+bool FindInDictionary(const Dictionary& dictionary, const std::string& originalWord, std::string& translation);
 
-void ReadDictionaryFromStream(std::istream& input, Dictionary& dictionary);
+Dictionary ReadDictionaryFromStream(std::istream& input);
 
 void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictionary);
 
-void SaveDictionaryToStream(std::ostream& output, Dictionary& dictionary);
+void SaveDictionaryToStream(std::ostream& output, const Dictionary& dictionary);
 
-void SaveDictionaryToFile(const std::string& outputFileName, Dictionary& dictionary);
+void SaveDictionaryToFile(const std::string& outputFileName, const Dictionary& dictionary);
 
