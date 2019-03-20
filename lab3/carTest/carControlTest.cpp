@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "../car/car.h"
 #include "../car/carControl.h"
+#include <functional>
 
 void VerifyCommandHandling(CCar &car, const std::string &command, const std::string &expectedOutput)
 {
@@ -33,3 +34,4 @@ TEST_CASE("can handle Gear, Speed and info command")
 	VerifyCommandHandling(car, "SetGear 2", "Selected gear 2\n");
 	VerifyCommandHandling(car, "Info", "Engine is turned on\nSpeed 20\nDirection forward\nGear Second\n");
 };
+
