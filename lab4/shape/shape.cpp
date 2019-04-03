@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "Shape.h"
 
-CShape::CShape(const std::string& outlineColor)
+CShape::CShape(const uint32_t& outlineColor)
 	: m_outlineColor(outlineColor)
 {}
 
-std::string CShape::GetOutlineColor() const
+uint32_t CShape::GetOutlineColor() const
 {
 	return m_outlineColor;
 }
 
-void CShape::SetOutlineColor(std::string const& color)
+void CShape::SetOutlineColor(uint32_t const& color)
 {
 	m_outlineColor = color;
 }

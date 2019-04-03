@@ -5,11 +5,11 @@ class CShape : public virtual IShape
 {
 public:
 	CShape() {};
-	CShape(const std::string& outlineColor);
+	CShape(const uint32_t& outlineColor);
 
-	std::string GetOutlineColor() const override final;
-	void SetOutlineColor(std::string const& color);
+	uint32_t GetOutlineColor() const override final;
+	void SetOutlineColor(uint32_t const& color);
 
 private:
-	std::string m_outlineColor;
+	uint32_t m_outlineColor;
 };

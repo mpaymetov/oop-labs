@@ -2,7 +2,7 @@
 #include "Circle.h"
 #include "SolidShape.h"
 
-CCircle::CCircle(const CPoint& center, const double radius, const std::string& outlineColor, const std::string& fillColor)
+CCircle::CCircle(const CPoint& center, const double radius, const uint32_t& outlineColor, const uint32_t& fillColor)
 	: m_center(center)
 	, m_radius(radius)
 	, CSolidShape(outlineColor, fillColor)
@@ -48,8 +48,8 @@ std::string CCircle::ToString() const
 		<< "Radius: " << GetRadius() << "\n"
 		<< "Area: " << GetArea() << "\n"
 		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << GetOutlineColor() << "\n"
-	    << "Fill color: " << GetFillColor() << "\n";
+		<< "Outline color: " << std::hex << GetOutlineColor() << "\n"
+		<< "Fill color: " << std::hex << GetFillColor() << "\n";
 
 	return str.str();
 }

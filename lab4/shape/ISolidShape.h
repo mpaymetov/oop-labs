@@ -4,5 +4,5 @@
 class ISolidShape : public virtual CShape
 {
 public:
-	virtual std::string GetFillColor() const = 0;
+	virtual uint32_t GetFillColor() const = 0;
 };

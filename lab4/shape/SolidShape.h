@@ -4,12 +4,12 @@
 class CSolidShape : public virtual ISolidShape
 {
 public:
-	CSolidShape(const std::string& outlineColor, const std::string& fillColor);
+	CSolidShape(const uint32_t& outlineColor, const uint32_t& fillColor);
 
-	std::string GetFillColor() const override final;
-	void SetFillColor(std::string const& color);
+	uint32_t GetFillColor() const override final;
+	void SetFillColor(uint32_t const& color);
 
 private:
-	std::string m_fillColor = "000000";
+	uint32_t m_fillColor = 0;
 
 };

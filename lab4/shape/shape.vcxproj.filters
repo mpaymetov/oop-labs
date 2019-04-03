@@ -101,4 +101,9 @@
       <Filter>TestingData</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.bat">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

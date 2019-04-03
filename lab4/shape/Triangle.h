@@ -2,11 +2,11 @@
 #include "SolidShape.h"
 #include "Point.h"
 
-class CTriangle final : public CSolidShape
+class CTriangle final : public CSolidShape, public ICanvasDrawable
 {
 public:
 	CTriangle(const CPoint& vertex1, const CPoint& vertex2, const CPoint& vertex3,
-		const std::string& outlineColor, const std::string& fillColor);
+		const uint32_t& outlineColor, const uint32_t& fillColor);
 	~CTriangle() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;

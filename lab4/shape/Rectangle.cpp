@@ -3,7 +3,7 @@
 #include "SolidShape.h"
 
 CRectangle::CRectangle(const CPoint& leftTop, const double& width, const double& height,
-	const std::string& outlineColor, const std::string& fillColor)
+	const uint32_t& outlineColor, const uint32_t& fillColor)
 	: m_leftTop(leftTop)
 	, m_width(width)
 	, m_height(height)
@@ -47,8 +47,8 @@ std::string CRectangle::ToString() const
 		<< "Height: " << m_height << "\n"
 		<< "Area: " << GetArea() << "\n"
 		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << GetOutlineColor() << "\n"
-		<< "Fill color: " << GetFillColor() << "\n";
+		<< "Outline color: " << std::hex << GetOutlineColor() << "\n"
+		<< "Fill color: " << std::hex << GetFillColor() << "\n";
 
 	return str.str();
 }

@@ -3,7 +3,7 @@
 #include "SolidShape.h"
 
 CTriangle::CTriangle(const CPoint& vertex1, const CPoint& vertex2, const CPoint& vertex3,
-	const std::string& outlineColor, const std::string& fillColor)
+	const uint32_t& outlineColor, const uint32_t& fillColor)
 	: m_vertex1(vertex1)
 	, m_vertex2(vertex2)
 	, m_vertex3(vertex3)
@@ -39,8 +39,8 @@ std::string CTriangle::ToString() const
 		<< "Vertex3 (" << m_vertex3.x << ", " << m_vertex3.y << ")\n"
 		<< "Area: " << GetArea() << "\n"
 		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << GetOutlineColor() << "\n"
-		<< "Fill color: " << GetFillColor() << "\n";
+		<< "Outline color: " << std::hex << GetOutlineColor() << "\n"
+		<< "Fill color: " << std::hex << GetFillColor() << "\n";
 
 	return str.str();
 }

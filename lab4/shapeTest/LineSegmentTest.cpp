@@ -3,7 +3,7 @@
 
 TEST_CASE("LineSegment")
 {
-	CLineSegment lineSegment({ 3, 4 }, { 6, 8 }, "0000FF");
+	CLineSegment lineSegment({ 3, 4 }, { 6, 8 }, 0x0000FF);
 	CPoint startPoint = lineSegment.GetStartPoint();
 	CHECK(startPoint.x == 3);
 	CHECK(startPoint.y == 4);
@@ -12,5 +12,5 @@ TEST_CASE("LineSegment")
 	CHECK(endPoint.y == 8);
 	CHECK(lineSegment.GetArea() == 0);
 	CHECK(lineSegment.GetPerimeter() == 5);
-	CHECK(lineSegment.GetOutlineColor() == "0000FF");
+	CHECK(lineSegment.GetOutlineColor() == 0x0000FF);
 }

@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "SolidShape.h"
 
-CSolidShape::CSolidShape(const std::string& outlineColor, const std::string& fillColor) :
+CSolidShape::CSolidShape(const uint32_t& outlineColor, const uint32_t& fillColor)
+	:
 	m_fillColor(fillColor)
 {
 	SetOutlineColor(outlineColor);
 }
 
-std::string CSolidShape::GetFillColor() const
+uint32_t CSolidShape::GetFillColor() const
 {
 	return m_fillColor;
 }
 
-void CSolidShape::SetFillColor(std::string const& color)
+void CSolidShape::SetFillColor(uint32_t const& color)
 {
 	m_fillColor = color;
 }

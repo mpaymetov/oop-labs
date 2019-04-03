@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "LineSegment.h"
 
-CLineSegment::CLineSegment(const CPoint & first, const CPoint & second, const std::string& color) :
+CLineSegment::CLineSegment(const CPoint& first, const CPoint& second, const uint32_t& color)
+	:
 	m_start(first),
 	m_end(second),
 	CShape(color)
@@ -38,7 +39,7 @@ std::string CLineSegment::ToString() const
 		<< "End point (" << m_end.x << ", " << m_end.y << ")\n"
 		<< "Area: " << GetArea() << "\n"
 		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << GetOutlineColor() << "\n";
+		<< "Outline color: " << std::hex << GetOutlineColor() << "\n";
 
 	return str.str();
 }

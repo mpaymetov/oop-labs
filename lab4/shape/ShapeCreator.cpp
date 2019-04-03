@@ -38,7 +38,8 @@ std::shared_ptr<CShape> CShapeCreator::ExecuteCommand() const
 std::shared_ptr<CShape> CShapeCreator::CreateLine(std::istream &args) const
 {
 	CPoint startPoint, endPoint;
-	std::string outlineColor, input;
+	std::string input;
+	uint32_t outlineColor;
 
 	try
 	{
@@ -56,7 +57,7 @@ std::shared_ptr<CShape> CShapeCreator::CreateLine(std::istream &args) const
 		endPoint.y = std::stod(input);
 		input.clear();
 
-		args >> outlineColor;
+		args >> std::hex >> outlineColor;
 	}
 	catch (const std::exception& e)
 	{
@@ -70,7 +71,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateLine(std::istream &args) const
 std::shared_ptr<CShape> CShapeCreator::CreateTriangle(std::istream &args) const
 {
 	CPoint vertex1, vertex2, vertex3;
-	std::string outlineColor, fillColor, input;
+	std::string input;
+	uint32_t outlineColor, fillColor;
 
 	try
 	{
@@ -94,8 +96,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateTriangle(std::istream &args) const
 		args >> input;
 		vertex3.y = std::stod(input);
 
-		args >> outlineColor;
-		args >> fillColor;
+		args >> std::hex >> outlineColor;
+		args >> std::hex >> fillColor;
 	}
 
 	catch (const std::exception& e)
@@ -111,7 +113,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateRectangle(std::istream &args) const
 {
 	CPoint leftTop;
 	double wight, heigth;
-	std::string outlineColor, fillColor, input;
+	std::string input;
+	uint32_t outlineColor, fillColor;
 
 	try
 	{
@@ -128,8 +131,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateRectangle(std::istream &args) const
 		args >> input;
 		heigth = std::stod(input);
 
-		args >> outlineColor;
-		args >> fillColor;
+		args >> std::hex >> outlineColor;
+		args >> std::hex >> fillColor;
 	}
 	catch (const std::exception& e)
 	{
@@ -144,7 +147,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateCircle(std::istream &args) const
 {
 	CPoint center;
 	double radius;
-	std::string outlineColor, fillColor, input;
+	std::string input;
+	uint32_t outlineColor, fillColor;
 
 	try
 	{
@@ -157,8 +161,8 @@ std::shared_ptr<CShape> CShapeCreator::CreateCircle(std::istream &args) const
 		args >> input;
 		radius = std::stod(input);
 
-		args >> outlineColor;
-		args >> fillColor;
+		args >> std::hex >> outlineColor;
+		args >> std::hex >> fillColor;
 	}
 	catch (const std::exception& e)
 	{
