@@ -2,10 +2,10 @@
 #include "Shape.h"
 #include "Point.h"
 
-class CLineSegment final : public CShape, public ICanvasDrawable
+class CLineSegment final : public CShape
 {
 public:
-	CLineSegment(const CPoint& first, const CPoint& second, const uint32_t& color);
+	CLineSegment(const CPoint& first, const CPoint& second, const uint32_t color);
 	~CLineSegment() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;

@@ -2,10 +2,10 @@
 #include "SolidShape.h"
 #include "Point.h"
 
-class CRectangle final : public CSolidShape, public ICanvasDrawable
+class CRectangle final : public CSolidShape
 {
 public:
-	CRectangle(const CPoint& leftTop, const double& width, const double& height, const uint32_t& outlineColor, const uint32_t& fillColor);
+	CRectangle(const CPoint& leftTop, const double width, const double height, const uint32_t outlineColor, const uint32_t fillColor);
 	~CRectangle() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;

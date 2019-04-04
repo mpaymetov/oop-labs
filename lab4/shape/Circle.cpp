@@ -2,7 +2,7 @@
 #include "Circle.h"
 #include "SolidShape.h"
 
-CCircle::CCircle(const CPoint& center, const double radius, const uint32_t& outlineColor, const uint32_t& fillColor)
+CCircle::CCircle(const CPoint& center, const double radius, const uint32_t outlineColor, const uint32_t fillColor)
 	: m_center(center)
 	, m_radius(radius)
 	, CSolidShape(outlineColor, fillColor)

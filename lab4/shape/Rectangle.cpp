@@ -2,8 +2,8 @@
 #include "Rectangle.h"
 #include "SolidShape.h"
 
-CRectangle::CRectangle(const CPoint& leftTop, const double& width, const double& height,
-	const uint32_t& outlineColor, const uint32_t& fillColor)
+CRectangle::CRectangle(const CPoint& leftTop, const double width, const double height,
+	const uint32_t outlineColor, const uint32_t fillColor)
 	: m_leftTop(leftTop)
 	, m_width(width)
 	, m_height(height)

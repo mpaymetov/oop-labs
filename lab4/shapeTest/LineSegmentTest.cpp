@@ -7,6 +7,7 @@ TEST_CASE("LineSegment")
 	CPoint startPoint = lineSegment.GetStartPoint();
 	CHECK(startPoint.x == 3);
 	CHECK(startPoint.y == 4);
+	
 	CPoint endPoint = lineSegment.GetEndPoint();
 	CHECK(endPoint.x == 6);
 	CHECK(endPoint.y == 8);

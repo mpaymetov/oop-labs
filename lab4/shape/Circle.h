@@ -2,10 +2,10 @@
 #include "SolidShape.h"
 #include "Point.h"
 
-class CCircle final : public CSolidShape, public ICanvasDrawable
+class CCircle final : public CSolidShape
 {
 public:
-	CCircle(const CPoint& center, const double radius, const uint32_t& outlineColor, const uint32_t& fillColor);
+	CCircle(const CPoint& center, const double radius, const uint32_t outlineColor, const uint32_t fillColor);
 	~CCircle() = default;
 	
 	double GetArea() const override;

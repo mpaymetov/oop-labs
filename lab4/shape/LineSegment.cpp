@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LineSegment.h"
 
-CLineSegment::CLineSegment(const CPoint& first, const CPoint& second, const uint32_t& color)
+CLineSegment::CLineSegment(const CPoint& first, const CPoint& second, const uint32_t color)
 	:
 	m_start(first),
 	m_end(second),

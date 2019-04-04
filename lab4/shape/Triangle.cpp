@@ -3,7 +3,7 @@
 #include "SolidShape.h"
 
 CTriangle::CTriangle(const CPoint& vertex1, const CPoint& vertex2, const CPoint& vertex3,
-	const uint32_t& outlineColor, const uint32_t& fillColor)
+	const uint32_t outlineColor, const uint32_t fillColor)
 	: m_vertex1(vertex1)
 	, m_vertex2(vertex2)
 	, m_vertex3(vertex3)
