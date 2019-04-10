@@ -46,10 +46,10 @@ double CRational::ToDouble() const
 	return (double)m_numerator / (double)m_denominator;
 }
 
-std::pair<int, CRational> CRational::GetMixedFraction() const
+std::pair<int, CRational> CRational::ToCompoundFraction() const
 {
-	int number1 = 2;
-	CRational number2(3);
+	int number1 = m_numerator / m_denominator;
+	CRational number2(m_numerator - number1 * m_denominator, m_denominator);
 	std::pair<int, CRational> result = std::make_pair(number1, number2);
 	return result;
 }
@@ -66,41 +66,77 @@ CRational const CRational::operator+() const
 
 CRational& CRational::operator+=(CRational const& number)
 {
+	m_numerator = m_numerator * number.GetDenominator() + number.GetNumerator() * m_denominator;
+	m_denominator = m_denominator * number.GetDenominator();
+	
+	int divisor = std::gcd(m_numerator, m_denominator);
+	m_numerator /= divisor;
+	m_denominator /= divisor;
+	
 	return *this;
 }
 
-CRational& CRational::operator+=(int number)
+CRational& CRational::operator+=(int intNumber)
 {
+	CRational number(intNumber);
+	*this += number;
 	return *this;
 }
 
 CRational& CRational::operator-=(CRational const& number)
 {
+	m_numerator = m_numerator * number.GetDenominator() - number.GetNumerator() * m_denominator;
+	m_denominator = m_denominator * number.GetDenominator();
+
+	int divisor = std::gcd(m_numerator, m_denominator);
+	m_numerator /= divisor;
+	m_denominator /= divisor;
+
 	return *this;
 }
 
-CRational& CRational::operator-=(int number)
+CRational& CRational::operator-=(int intNumber)
 {
+	CRational number(intNumber);
+	*this -= number;
 	return *this;
 }
 
 CRational& CRational::operator*=(CRational const& number)
 {
+	m_numerator = m_numerator * number.GetNumerator();
+	m_denominator = m_denominator * number.GetDenominator();
+
+	int divisor = std::gcd(m_numerator, m_denominator);
+	m_numerator /= divisor;
+	m_denominator /= divisor;
+
 	return *this;
 }
 
-CRational& CRational::operator*=(int number)
+CRational& CRational::operator*=(int intNumber)
 {
+	CRational number(intNumber);
+	*this *= number;
 	return *this;
 }
 
 CRational& CRational::operator/=(CRational const& number)
 {
+	m_numerator = m_numerator * number.GetDenominator();
+	m_denominator = m_denominator * number.GetNumerator();
+
+	int divisor = std::gcd(m_numerator, m_denominator);
+	m_numerator /= divisor;
+	m_denominator /= divisor;
+
 	return *this;
 }
 
-CRational& CRational::operator/=(int number)
+CRational& CRational::operator/=(int intNumber)
 {
+	CRational number(intNumber);
+	*this /= number;
 	return *this;
 }
 
@@ -206,8 +242,32 @@ bool const operator!=(CRational const& number1, CRational const& number2)
 	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
 }
 
+bool const operator!=(CRational const& number1, int intNumber2)
+{
+	CRational number2(intNumber2);
+	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
+}
+
+bool const operator!=(int intNumber1, CRational const& number2)
+{
+	CRational number1(intNumber1);
+	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
+}
+
 bool const operator<(CRational const& number1, CRational const& number2)
 {
+	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
+}
+
+bool const operator<(CRational const& number1, int intNumber2)
+{
+	CRational number2(intNumber2);
+	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
+}
+
+bool const operator<(int intNumber1, CRational const& number2)
+{
+	CRational number1(intNumber1);
 	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
 }
 
@@ -216,14 +276,50 @@ bool const operator>(CRational const& number1, CRational const& number2)
 	return number1.GetNumerator() * number2.GetDenominator() > number2.GetNumerator() * number1.GetDenominator();
 }
 
+bool const operator>(CRational const& number1, int intNumber2)
+{
+	CRational number2(intNumber2);
+	return number1 > number2;
+}
+
+bool const operator>(int intNumber1, CRational const& number2)
+{
+	CRational number1(intNumber1);
+	return number1 > number2;
+}
+
 bool const operator<=(CRational const& number1, CRational const& number2)
 {
 	return number1.GetNumerator() * number2.GetDenominator() <= number2.GetNumerator() * number1.GetDenominator();
 }
 
+bool const operator<=(CRational const& number1, int intNumber2)
+{
+	CRational number2(intNumber2);
+	return number1 <= number2;
+}
+
+bool const operator<=(int intNumber1, CRational const& number2)
+{
+	CRational number1(intNumber1);
+	return number1 <= number2;
+}
+
 bool const operator>=(CRational const& number1, CRational const& number2)
 {
 	return number1.GetNumerator() * number2.GetDenominator() >= number2.GetNumerator() * number1.GetDenominator();
+}
+
+bool const operator>=(CRational const& number1, int intNumber2)
+{
+	CRational number2(intNumber2);
+	return number1 >= number2;
+}
+
+bool const operator>=(int intNumber1, CRational const& number2)
+{
+	CRational number1(intNumber1);
+	return number1 >= number2;
 }
 
 std::ostream& operator<<(std::ostream& strm, CRational const& number)

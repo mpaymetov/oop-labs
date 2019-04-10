@@ -1,6 +1,11 @@
 #include "stdafx.h"
+#include "Rational.h"
 
 int main()
 {
-	std::cout << "Hello World!\n";
+	CRational number;
+	std::cin >> number;
+	std::cout << number;
+
+	return 0;
 }
