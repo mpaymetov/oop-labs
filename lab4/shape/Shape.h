@@ -15,5 +15,5 @@ public:
 private:
 	uint32_t m_outlineColor = 0;
 
-	void AppendProperties(std::ostream& strm) const override;
+	virtual void AppendProperties(std::ostream& strm) const = 0;
 };

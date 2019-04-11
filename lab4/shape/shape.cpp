@@ -28,7 +28,3 @@ std::string CShape::ToString() const
 
 	return strm.str();
 }
-
-void CShape::AppendProperties(std::ostream& strm) const
-{
-}

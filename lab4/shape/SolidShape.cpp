@@ -41,7 +41,3 @@ std::string CSolidShape::ToString() const
 
 	return strm.str();
 }
-
-void CSolidShape::AppendProperties(std::ostream& strm) const
-{
-}
