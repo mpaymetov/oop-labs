@@ -1,18 +1,6 @@
 #include "stdafx.h"
 #include "Rational.h"
 
-CRational::CRational()
-	: m_numerator(0)
-	, m_denominator(1)
-{
-}
-
-CRational::CRational(int value)
-	: m_numerator(value)
-	, m_denominator(1)
-{
-}
-
 CRational::CRational(int numerator, int denominator)
 	: m_numerator(numerator)
 	, m_denominator(denominator)
@@ -76,13 +64,6 @@ CRational& CRational::operator+=(CRational const& number)
 	return *this;
 }
 
-CRational& CRational::operator+=(int intNumber)
-{
-	CRational number(intNumber);
-	*this += number;
-	return *this;
-}
-
 CRational& CRational::operator-=(CRational const& number)
 {
 	m_numerator = m_numerator * number.GetDenominator() - number.GetNumerator() * m_denominator;
@@ -92,13 +73,6 @@ CRational& CRational::operator-=(CRational const& number)
 	m_numerator /= divisor;
 	m_denominator /= divisor;
 
-	return *this;
-}
-
-CRational& CRational::operator-=(int intNumber)
-{
-	CRational number(intNumber);
-	*this -= number;
 	return *this;
 }
 
@@ -114,13 +88,6 @@ CRational& CRational::operator*=(CRational const& number)
 	return *this;
 }
 
-CRational& CRational::operator*=(int intNumber)
-{
-	CRational number(intNumber);
-	*this *= number;
-	return *this;
-}
-
 CRational& CRational::operator/=(CRational const& number)
 {
 	m_numerator = m_numerator * number.GetDenominator();
@@ -133,31 +100,11 @@ CRational& CRational::operator/=(CRational const& number)
 	return *this;
 }
 
-CRational& CRational::operator/=(int intNumber)
-{
-	CRational number(intNumber);
-	*this /= number;
-	return *this;
-}
-
 CRational const operator+(CRational const& number1, CRational const& number2)
 {
 	int numerator = number1.GetNumerator() * number2.GetDenominator() + number2.GetNumerator() * number1.GetDenominator();
 	int denominator = number1.GetDenominator() * number2.GetDenominator();
 	CRational result(numerator, denominator);
-	return result;
-}
-
-CRational const operator+(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	CRational result = number1 + number2;
-	return result;
-}
-
-CRational const operator+(int intNumber1, CRational const& number2)
-{
-	CRational result = number2 + intNumber1;
 	return result;
 }
 
@@ -169,35 +116,12 @@ CRational const operator-(CRational const& number1, CRational const& number2)
 	return result;
 }
 
-CRational const operator-(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 - number2;
-}
-
-CRational const operator-(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1 - number2;
-}
-
 CRational const operator*(CRational const& number1, CRational const& number2)
 {
 	int numerator = number1.GetNumerator() * number2.GetNumerator();
 	int denominator = number1.GetDenominator() * number2.GetDenominator();
 	CRational result(numerator, denominator);
 	return result;
-}
-
-CRational const operator*(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 * number2;
-}
-
-CRational const operator*(int number1, CRational const& number2)
-{
-	return number2 * number1;
 }
 
 CRational const operator/(CRational const& number1, CRational const& number2)
@@ -208,32 +132,8 @@ CRational const operator/(CRational const& number1, CRational const& number2)
 	return result;
 }
 
-CRational const operator/(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 / number2;
-}
-
-CRational const operator/(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1 / number2;
-}
-
 bool const operator==(CRational const& number1, CRational const& number2)
 {
-	return number1.GetNumerator() * number2.GetDenominator() == number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator==(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1.GetNumerator() * number2.GetDenominator() == number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator==(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
 	return number1.GetNumerator() * number2.GetDenominator() == number2.GetNumerator() * number1.GetDenominator();
 }
 
@@ -242,32 +142,8 @@ bool const operator!=(CRational const& number1, CRational const& number2)
 	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
 }
 
-bool const operator!=(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator!=(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1.GetNumerator() * number2.GetDenominator() != number2.GetNumerator() * number1.GetDenominator();
-}
-
 bool const operator<(CRational const& number1, CRational const& number2)
 {
-	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator<(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator<(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
 	return number1.GetNumerator() * number2.GetDenominator() < number2.GetNumerator() * number1.GetDenominator();
 }
 
@@ -276,50 +152,14 @@ bool const operator>(CRational const& number1, CRational const& number2)
 	return number1.GetNumerator() * number2.GetDenominator() > number2.GetNumerator() * number1.GetDenominator();
 }
 
-bool const operator>(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 > number2;
-}
-
-bool const operator>(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1 > number2;
-}
-
 bool const operator<=(CRational const& number1, CRational const& number2)
 {
 	return number1.GetNumerator() * number2.GetDenominator() <= number2.GetNumerator() * number1.GetDenominator();
 }
 
-bool const operator<=(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 <= number2;
-}
-
-bool const operator<=(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1 <= number2;
-}
-
 bool const operator>=(CRational const& number1, CRational const& number2)
 {
 	return number1.GetNumerator() * number2.GetDenominator() >= number2.GetNumerator() * number1.GetDenominator();
-}
-
-bool const operator>=(CRational const& number1, int intNumber2)
-{
-	CRational number2(intNumber2);
-	return number1 >= number2;
-}
-
-bool const operator>=(int intNumber1, CRational const& number2)
-{
-	CRational number1(intNumber1);
-	return number1 >= number2;
 }
 
 std::ostream& operator<<(std::ostream& strm, CRational const& number)

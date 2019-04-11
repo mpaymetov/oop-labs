@@ -6,7 +6,6 @@ TEST_CASE("test create Rational number with no Numerator and no Denominator")
 	CRational number;
 	CHECK(number.GetNumerator() == 0);
 	CHECK(number.GetDenominator() == 1);
-	CHECK(number.ToDouble() == 0);
 }
 
 TEST_CASE("test create Rational number with Numerator and no Denominator")
@@ -14,7 +13,6 @@ TEST_CASE("test create Rational number with Numerator and no Denominator")
 	CRational number(3);
 	CHECK(number.GetNumerator() == 3);
 	CHECK(number.GetDenominator() == 1);
-	CHECK(number.ToDouble() == 3);
 }
 
 TEST_CASE("test create Rational number with Numerator and Denominator")
@@ -22,27 +20,42 @@ TEST_CASE("test create Rational number with Numerator and Denominator")
 	CRational number(3, 2);
 	CHECK(number.GetNumerator() == 3);
 	CHECK(number.GetDenominator() == 2);
-	CHECK(number.ToDouble() == 1.5);
 }
 
-TEST_CASE("test create Rational number with Denominator 0")
+TEST_CASE("test Denominator must be a natural number")
 {
 	CHECK_THROWS_AS(CRational(3, 0), std::invalid_argument);
-}
-
-TEST_CASE("test create Rational number if Denominator < 0")
-{
 	CRational number(3, -2);
 	CHECK(number.GetNumerator() == -3);
 	CHECK(number.GetDenominator() == 2);
-	CHECK(number.ToDouble() == -1.5);
 }
 
-TEST_CASE("test create Rational number with Normalize")
+TEST_CASE("test converting rational number to double")
 {
-	CRational number(15, 10);
-	CHECK(number.GetNumerator() == 3);
-	CHECK(number.GetDenominator() == 2);
+	CRational first(3);
+	CHECK(first.ToDouble() == 3.0);
+
+	CRational second(-3, 4);
+	CHECK(second.ToDouble() == -0.75);
+}
+
+TEST_CASE("test creation Rational number with normalizing")
+{
+	CRational first(15, 10);
+	CHECK(first.GetNumerator() == 3);
+	CHECK(first.GetDenominator() == 2);
+
+	CRational second(-20, 40);
+	CHECK(second.GetNumerator() == -1);
+	CHECK(second.GetDenominator() == 2);
+
+	CRational third(12, -9);
+	CHECK(third.GetNumerator() == -4);
+	CHECK(third.GetDenominator() == 3);
+
+	CRational fourth(-28, -12);
+	CHECK(fourth.GetNumerator() == 7);
+	CHECK(fourth.GetDenominator() == 3);
 }
 
 TEST_CASE("test unary plus")
@@ -51,7 +64,6 @@ TEST_CASE("test unary plus")
 	CRational result = +number;
 	CHECK(number.GetNumerator() == 4);
 	CHECK(number.GetDenominator() == 5);
-	CHECK(number.ToDouble() == 0.8);
 }
 
 TEST_CASE("test unary minus")
@@ -165,7 +177,6 @@ TEST_CASE("test binary plus 2 Rational numbers")
 	CRational result = first + second;
 	CHECK(result.GetNumerator() == 3);
 	CHECK(result.GetDenominator() == 4);
-	CHECK(result.ToDouble() == 0.75);
 }
 
 TEST_CASE("test binary plus Rational and int numbers")
@@ -193,7 +204,6 @@ TEST_CASE("test binary minus 2 Rational numbers")
 	CRational result = first - second;
 	CHECK(result.GetNumerator() == 1);
 	CHECK(result.GetDenominator() == 4);
-	CHECK(result.ToDouble() == 0.25);
 }
 TEST_CASE("test binary minus Rational and int numbers")
 {
@@ -202,7 +212,6 @@ TEST_CASE("test binary minus Rational and int numbers")
 	CRational result = first - second;
 	CHECK(result.GetNumerator() == 2);
 	CHECK(result.GetDenominator() == 1);
-	CHECK(result.ToDouble() == 2.0);
 }
 TEST_CASE("test binary minus int and Rational numbers")
 {
@@ -211,7 +220,6 @@ TEST_CASE("test binary minus int and Rational numbers")
 	CRational result = first - second;
 	CHECK(result.GetNumerator() == 9);
 	CHECK(result.GetDenominator() == 4);
-	CHECK(result.ToDouble() == 2.25);
 }
 
 TEST_CASE("test binary multiplication 2 Rational numbers")
@@ -221,7 +229,6 @@ TEST_CASE("test binary multiplication 2 Rational numbers")
 	CRational result = first * second;
 	CHECK(result.GetNumerator() == 3);
 	CHECK(result.GetDenominator() == 8);
-	CHECK(result.ToDouble() == 0.375);
 }
 
 TEST_CASE("test binary multiplication Rational and int numbers")
@@ -231,7 +238,6 @@ TEST_CASE("test binary multiplication Rational and int numbers")
 	CRational result = first * second;
 	CHECK(result.GetNumerator() == 3);
 	CHECK(result.GetDenominator() == 2);
-	CHECK(result.ToDouble() == 1.5);
 }
 
 TEST_CASE("test binary multiplication int and Rational numbers")
@@ -241,7 +247,6 @@ TEST_CASE("test binary multiplication int and Rational numbers")
 	CRational result = first * second;
 	CHECK(result.GetNumerator() == 9);
 	CHECK(result.GetDenominator() == 4);
-	CHECK(result.ToDouble() == 2.25);
 }
 
 TEST_CASE("test binary division 2 Rational numbers")
@@ -251,7 +256,6 @@ TEST_CASE("test binary division 2 Rational numbers")
 	CRational result = first / second;
 	CHECK(result.GetNumerator() == 3);
 	CHECK(result.GetDenominator() == 8);
-	CHECK(result.ToDouble() == 0.375);
 }
 
 TEST_CASE("test binary division Rational and int numbers")
@@ -261,7 +265,6 @@ TEST_CASE("test binary division Rational and int numbers")
 	CRational result = first / second;
 	CHECK(result.GetNumerator() == 3);
 	CHECK(result.GetDenominator() == 8);
-	CHECK(result.ToDouble() == 0.375);
 }
 
 TEST_CASE("test binary division int and Rational numbers")
@@ -271,7 +274,6 @@ TEST_CASE("test binary division int and Rational numbers")
 	CRational result = first / second;
 	CHECK(result.GetNumerator() == 5);
 	CHECK(result.GetDenominator() == 2);
-	CHECK(result.ToDouble() == 2.5);
 }
 
 TEST_CASE("test operator == 2 Rational numbers")
