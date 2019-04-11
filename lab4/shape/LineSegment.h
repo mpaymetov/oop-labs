@@ -9,7 +9,7 @@ public:
 	~CLineSegment() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	std::string ToString() const override;
+	std::string GetType() const override;
 
 	void Draw(ICanvas & canvas) const override;
 
@@ -19,5 +19,7 @@ public:
 private:
 	CPoint m_start;
 	CPoint m_end;
+
+	void AppendProperties(std::ostream& strm) const override;
 };
 

@@ -10,10 +10,12 @@ public:
 	~CTriangle() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	std::string ToString() const override;
+	std::string GetType() const override;
 
 	void Draw(ICanvas & canvas) const override;
 
 private:
 	CPoint m_vertex1, m_vertex2, m_vertex3;
+
+	void AppendProperties(std::ostream& strm) const override;
 };

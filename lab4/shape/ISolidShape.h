@@ -1,7 +1,7 @@
 #pragma once
 #include "Shape.h"
 
-class ISolidShape : public virtual IShape
+class ISolidShape : public IShape
 {
 public:
 	virtual uint32_t GetFillColor() const = 0;

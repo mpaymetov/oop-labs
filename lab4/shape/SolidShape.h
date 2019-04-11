@@ -1,7 +1,7 @@
 #pragma once
 #include "ISolidShape.h"
 
-class CSolidShape : public virtual ISolidShape
+class CSolidShape : public ISolidShape
 {
 public:
 	CSolidShape(const uint32_t outlineColor, const uint32_t fillColor);
@@ -12,7 +12,11 @@ public:
 	uint32_t GetFillColor() const override final;
 	void SetFillColor(uint32_t const color);
 
+	std::string ToString() const override;
+
 private:
 	uint32_t m_fillColor = 0;
 	uint32_t m_outlineColor = 0;
+
+	void AppendProperties(std::ostream& strm) const override;
 };

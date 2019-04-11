@@ -3,10 +3,11 @@
 #include "SolidShape.h"
 
 CCircle::CCircle(const CPoint& center, const double radius, const uint32_t outlineColor, const uint32_t fillColor)
-	: m_center(center)
+	: CSolidShape(outlineColor, fillColor)
+	, m_center(center)
 	, m_radius(radius)
-	, CSolidShape(outlineColor, fillColor)
-{}
+{
+}
 
 double CCircle::GetArea() const
 {
@@ -38,20 +39,19 @@ void CCircle::SetRadius(double radius)
 	m_radius = radius;
 }
 
-std::string CCircle::ToString() const
+std::string CCircle::GetType() const
 {
-	std::ostringstream str;
-	str << std::fixed << std::setprecision(2);
+	return "Circle";
+}
 
-	str << "Circle:\n"
-		<< "Center (" << m_center.x << ", " << m_center.y << ")\n"
-		<< "Radius: " << GetRadius() << "\n"
-		<< "Area: " << GetArea() << "\n"
-		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << std::hex << GetOutlineColor() << "\n"
-		<< "Fill color: " << std::hex << GetFillColor() << "\n";
+void CCircle::AppendProperties(std::ostream& strm) const
+{
+	strm << std::fixed << std::setprecision(2);
 
-	return str.str();
+	strm << "Center (" << m_center.x << ", " << m_center.y << ")\n"
+		 << "Radius: " << GetRadius() << "\n";
+
+	return;
 }
 
 void CCircle::Draw(ICanvas& canvas) const

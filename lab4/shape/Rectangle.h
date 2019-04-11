@@ -9,7 +9,7 @@ public:
 	~CRectangle() = default;
 	double GetArea() const override;
 	double GetPerimeter() const override;
-	std::string ToString() const override;
+	std::string GetType() const override;
 
 	void Draw(ICanvas & canvas) const override;
 
@@ -21,4 +21,6 @@ private:
 	CPoint m_leftTop;
 	double m_width;
 	double m_height;
+
+	void AppendProperties(std::ostream& strm) const override;
 };

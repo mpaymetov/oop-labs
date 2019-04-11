@@ -1,7 +1,7 @@
 #pragma once
 #include "IShape.h"
 
-class CShape : public virtual IShape
+class CShape : public IShape
 {
 public:
 	CShape() {}
@@ -10,6 +10,10 @@ public:
 	uint32_t GetOutlineColor() const override final;
 	void SetOutlineColor(uint32_t const color);
 
+	std::string ToString() const override;
+
 private:
 	uint32_t m_outlineColor = 0;
+
+	void AppendProperties(std::ostream& strm) const override;
 };

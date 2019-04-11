@@ -2,8 +2,7 @@
 #include "SolidShape.h"
 
 CSolidShape::CSolidShape(const uint32_t outlineColor, const uint32_t fillColor)
-	:
-	m_fillColor(fillColor)
+	: m_fillColor(fillColor)
 {
 	SetOutlineColor(outlineColor);
 }
@@ -28,3 +27,21 @@ void CSolidShape::SetFillColor(uint32_t const color)
 	m_fillColor = color;
 }
 
+std::string CSolidShape::ToString() const
+{
+	std::ostringstream strm;
+	strm << std::fixed << std::setprecision(2);
+
+	strm << GetType() << "\n"
+		 << "Area: " << GetArea() << "\n"
+		 << "Perimeter: " << GetPerimeter() << "\n"
+		 << "Outline color: " << std::hex << GetOutlineColor() << "\n"
+		 << "Fill color: " << std::hex << GetFillColor() << "\n";
+	AppendProperties(strm);
+
+	return strm.str();
+}
+
+void CSolidShape::AppendProperties(std::ostream& strm) const
+{
+}

@@ -2,10 +2,9 @@
 #include "LineSegment.h"
 
 CLineSegment::CLineSegment(const CPoint& first, const CPoint& second, const uint32_t color)
-	:
-	m_start(first),
-	m_end(second),
-	CShape(color)
+	: CShape(color)
+	, m_start(first)
+	, m_end(second)
 {
 }
 
@@ -29,19 +28,16 @@ CPoint CLineSegment::GetEndPoint() const
 	return m_end;
 }
 
-std::string CLineSegment::ToString() const
+std::string CLineSegment::GetType() const
 {
-	std::ostringstream str;
-	str << std::fixed << std::setprecision(2);
+	return "LineSegment";
+}
 
-	str << "LineSegment:\n"
-		<< "Start point (" << m_start.x << ", " << m_start.y << ")\n"
-		<< "End point (" << m_end.x << ", " << m_end.y << ")\n"
-		<< "Area: " << GetArea() << "\n"
-		<< "Perimeter: " << GetPerimeter() << "\n"
-		<< "Outline color: " << std::hex << GetOutlineColor() << "\n";
-
-	return str.str();
+void CLineSegment::AppendProperties(std::ostream& strm) const
+{
+	strm << std::fixed << std::setprecision(2);
+	strm << "Start point (" << m_start.x << ", " << m_start.y << ")\n"
+		 << "End point (" << m_end.x << ", " << m_end.y << ")\n";
 }
 
 void CLineSegment::Draw(ICanvas& canvas) const
