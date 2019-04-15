@@ -1,6 +1,11 @@
 #pragma once
 #include "stdafx.h"
 
+constexpr unsigned short HttpDefaultPort = 80;
+constexpr unsigned short HttpsDefaultPort = 443;
+constexpr unsigned short MinPort = 1;
+constexpr unsigned short MaxPort = 65535;
+
 enum Protocol
 {
 	HTTP,
@@ -28,4 +33,12 @@ private:
 	std::string m_document;
 	Protocol m_protocol;
 	unsigned short m_port;
+
+	bool IsPortDefault();
+	std::string ProtocolToString();
+	void UpdateDomain(const std::string& domain);
+	void UpdateDocument(const std::string& document);
+	void UpdatePortFromProtocol();
+	void UpdatePortFromString(std::string& portStr);
+	void GreateUrl();
 };

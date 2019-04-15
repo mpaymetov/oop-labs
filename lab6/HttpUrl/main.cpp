@@ -13,7 +13,7 @@ void PrintUrlParseResult(const CHttpUrl& url, std::ostream& output)
 	output << "domain: " << url.GetDomain() << "\n";
 	output << "document: " << url.GetDocument() << "\n";
 	output << "port: " << url.GetPort() << "\n";
-	output << "url: " << ProtocolToString(url.GetProtocol()) << "\n";
+	output << "protocol: " << ProtocolToString(url.GetProtocol()) << "\n";
 }
 
 void ParseUrl(std::istream& input, std::ostream& output)
