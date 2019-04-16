@@ -131,9 +131,9 @@ TEST_CASE("test operator *= for Rational numbers")
 	CHECK(first.GetDenominator() == 15);
 
 	CRational third(2, 9);
-	CRational fourth(4, 2);
+	CRational fourth(5, 2);
 	third *= fourth;
-	CHECK(third.GetNumerator() == 4);
+	CHECK(third.GetNumerator() == 5);
 	CHECK(third.GetDenominator() == 9);
 }
 
