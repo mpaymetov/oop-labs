@@ -36,6 +36,10 @@ TEST_CASE("test port must be number in range 1..65535")
 {
 	CHECK_THROWS_AS(CHttpUrl("http://www.google.com:port"), CUrlParsingError);
 	CHECK_THROWS_AS(CHttpUrl("http://www.google.com:99999"), CUrlParsingError);
+	CHECK_THROWS_AS(CHttpUrl("http://www.google.com:0"), CUrlParsingError);
+	CheckExpectedHttpUrlCreateResult(CHttpUrl("https://www.google.com:1"), "https://www.google.com:1", "www.google.com", "/", Protocol::HTTPS, 1);
+	CheckExpectedHttpUrlCreateResult(CHttpUrl("https://www.google.com:65535"), "https://www.google.com:65535", "www.google.com", "/", Protocol::HTTPS, 65535);
+	CHECK_THROWS_AS(CHttpUrl("http://www.google.com:65536"), CUrlParsingError);
 }
 
 TEST_CASE("test parse document")

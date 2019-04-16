@@ -6,7 +6,7 @@ constexpr unsigned short HttpsDefaultPort = 443;
 constexpr unsigned short MinPort = 1;
 constexpr unsigned short MaxPort = 65535;
 
-enum Protocol
+enum class Protocol
 {
 	HTTP,
 	HTTPS
@@ -17,7 +17,7 @@ class CHttpUrl
 public:
 
 	CHttpUrl(std::string const& url);
-	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol = HTTP);
+	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol = Protocol::HTTP);
 	CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, unsigned short port);
 
 	std::string GetURL() const;
@@ -40,5 +40,5 @@ private:
 	void UpdateDocument(const std::string& document);
 	void UpdatePortFromProtocol();
 	void UpdatePortFromString(std::string& portStr);
-	void GreateUrl();
+	void CreateUrl();
 };

@@ -29,7 +29,7 @@ CHttpUrl::CHttpUrl(std::string const& url)
 
 	UpdateDomain(host);
 	UpdateDocument(document);
-	GreateUrl();
+	CreateUrl();
 }
 
 CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol)
@@ -38,7 +38,7 @@ CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Proto
 	UpdateDomain(domain);
 	UpdatePortFromProtocol();
 	UpdateDocument(document);
-	GreateUrl();
+	CreateUrl();
 }
 
 CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Protocol protocol, unsigned short port)
@@ -47,7 +47,7 @@ CHttpUrl::CHttpUrl(std::string const& domain, std::string const& document, Proto
 	UpdateDomain(domain);
 	m_port = port;
 	UpdateDocument(document);
-	GreateUrl();
+	CreateUrl();
 }
 
 std::string CHttpUrl::GetURL() const
@@ -135,7 +135,7 @@ void CHttpUrl::UpdatePortFromString(std::string& portStr)
 	m_port = port;
 }
 
-void CHttpUrl::GreateUrl()
+void CHttpUrl::CreateUrl()
 {
 	m_url = ProtocolToString() + "://" + m_domain;
 	if (!IsPortDefault())
