@@ -9,12 +9,12 @@ bool FindMax(std::vector<T> const& arr, T& maxValue, Less const& less)
 		return false;
 	}
 	
-	auto max = arr[0];
-	for (auto& val : arr)
+	auto max = arr.begin();
+	for (auto it = arr.begin(); it != arr.end(); ++it)
 	{
-		max = (less(max, val)) ? val : max;
+		max = (less(*max, *it)) ? it : max;
 	}
 
-	maxValue = max;
+	maxValue = *max;
 	return true;
 }
