@@ -63,9 +63,9 @@ void ReadDictionaryFromFile(const std::string& inputFileName, Dictionary& dictio
 
 void SaveDictionaryToStream(std::ostream& output, const Dictionary& dictionary)
 {
-	for (const auto& item : dictionary.forward)
+	for (const auto& [word, translation] : dictionary.forward)
 	{
-		output << item.first << std::endl << item.second << std::endl;
+		output << word << std::endl << translation << std::endl;
 	}
 }
 
