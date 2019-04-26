@@ -16,8 +16,3 @@ void CVariable::SetValue(double value)
 	m_value = value;
 	m_isSet = true;
 }
-
-std::string CVariable::GetType() const
-{
-	return "var";
-}

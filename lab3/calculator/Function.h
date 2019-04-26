@@ -6,13 +6,15 @@
 class CFunction : public IValueRetriever
 {
 public:
+	CFunction(std::shared_ptr<IValueRetriever> first, COperator mathOperator = COperator::Undefined, std::shared_ptr<IValueRetriever> second = nullptr);
+
 	double GetValue() const override;
 	bool HaveValue() const override;
 
-	std::string GetType() const override;
+	void SetParams(std::shared_ptr<IValueRetriever> first, COperator mathOperator = COperator::Undefined, std::shared_ptr<IValueRetriever> second = nullptr);
 
 private:
-	std::shared_ptr<IValueRetriever> m_firstOperand = nullptr;
-	std::shared_ptr<IValueRetriever> n_secondOperand = nullptr;
-	COperator m_operator = COperator::Undefined;
+	std::shared_ptr<IValueRetriever> m_firstOperand;
+	std::shared_ptr<IValueRetriever> m_secondOperand;
+	COperator m_operator;
 };

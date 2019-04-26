@@ -11,9 +11,11 @@ std::string ConvertErrorToString(const Error &error)
 	case Error::VARIABLE_ALREADY_EXISTS:
 		return "Variable already exists";
 	case Error::VARIABLE_NOT_EXIST:
-		return "Variable not exist";
+		return "Variable not exists";
 	case Error::IDENTIFIER_NAME_INCORRECT:
 		return "identifier name incorrect";
+	case Error::VALUE_INCORRECT:
+		return "value incorrect";
 	}
 	return "not error";
 }
@@ -76,6 +78,14 @@ bool CCalcControl::Let(std::istream & args)
 
 bool CCalcControl::Fn(std::istream & args)
 {
+	std::string identifier, assign, firstOperand, mathOperator, secondOperand;
+	args >> identifier >> assign >> firstOperand >> mathOperator >> secondOperand;
+
+
+	if (!m_calculator.SetFn(identifier, firstOperand, mathOperator, secondOperand))
+	{
+		m_output << ConvertErrorToString(m_calculator.GetError()) << std::endl;
+	}
 	return true;
 }
 
