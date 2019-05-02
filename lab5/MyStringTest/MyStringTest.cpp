@@ -68,7 +68,6 @@ TEST_CASE("test CMyString create with move constructor")
 	const char* pString = "Hello";
 	CMyString first(pString);
 	CMyString second = first.SubString(0);
-	const char* test = second.GetStringData();
 	CHECK(strcmp(second.GetStringData(), pString) == 0);
 }
 
@@ -80,8 +79,7 @@ TEST_CASE("test CMyString SubString")
 	CMyString second = first.SubString(6, 5);
 	CHECK(strcmp(second.GetStringData(), test) == 0);
 
-	//CMyString third = first.SubString(15, 5);
-	//CHECK(strcmp(third.GetStringData(), "") == 0);
+	CHECK_THROWS_AS(first.SubString(15, 5), std::out_of_range);
 }
 
 TEST_CASE("test CMyString operator+=")
@@ -141,3 +139,166 @@ TEST_CASE("test CMyString moving assignment operator")
 	second = first.SubString(0);
 	CHECK(strcmp(second.GetStringData(), pString) == 0);
 }
+
+TEST_CASE("test CMyString operator [] const")
+{
+	const char* pString = "Hello";
+	CMyString first(pString);
+	const char ch = first[1];
+	CHECK(ch == 'e');
+	CHECK_THROWS_AS(first[8], std::out_of_range);
+}
+
+TEST_CASE("test CMyString operator []")
+{
+	const char* pString = "Hello";
+	CMyString first(pString);
+	first[3] = 'i';
+	CHECK(strcmp(first.GetStringData(), "Helio") == 0);
+	CHECK_THROWS_AS(first[8] = 'e', std::out_of_range);
+}
+
+TEST_CASE("test CMyString operator ==")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(first == second);
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(!(first == third));
+
+	const char* str4 = "Hi";
+	CMyString fourth(str4);
+	CHECK(!(first == fourth));
+}
+
+TEST_CASE("test CMyString operator !=")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(!(first != second));
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(first != third);
+
+	const char* str4 = "Hi";
+	CMyString fourth(str4);
+	CHECK(first != fourth);
+}
+
+TEST_CASE("test CMyString operator <")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(!(first < second));
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(first < third);
+	CHECK(!(third < first));
+
+	const char* str4 = "Helio";
+	CMyString fourth(str4);
+	CHECK(fourth < first);
+	CHECK(!(first < fourth));
+
+	const char* str5 = "Hell";
+	CMyString fifth(str5);
+	CHECK(fifth < first);
+	CHECK(!(first < fifth));
+}
+
+TEST_CASE("test CMyString operator >")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(!(first > second));
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(!(first > third));
+	CHECK(third > first);
+
+	const char* str4 = "Helio";
+	CMyString fourth(str4);
+	CHECK(first > fourth);
+	CHECK(!(fourth > first));
+
+	const char* str5 = "Hell";
+	CMyString fifth(str5);
+	CHECK(!(fifth > first));
+	CHECK(first > fifth);
+}
+
+TEST_CASE("test CMyString operator <=")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(first <= second);
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(!(third <= first));
+	CHECK(first <= third);
+
+	const char* str4 = "Helio";
+	CMyString fourth(str4);
+	CHECK(fourth <= first);
+	CHECK(!(first <= fourth));
+
+	const char* str5 = "Hell";
+	CMyString fifth(str5);
+	CHECK(fifth <= first);
+	CHECK(!(first <= fifth));
+}
+
+TEST_CASE("test CMyString operator >=")
+{
+	const char* str1 = "Hello";
+	CMyString first(str1);
+	CMyString second(str1);
+	CHECK(first >= second);
+
+	const char* str3 = "World";
+	CMyString third(str3);
+	CHECK(!(first >= third));
+	CHECK(third >= first);
+
+	const char* str4 = "Helio";
+	CMyString fourth(str4);
+	CHECK(first >= fourth);
+	CHECK(!(fourth >= first));
+
+	const char* str5 = "Hell";
+	CMyString fifth(str5);
+	CHECK(!(fifth >= first));
+	CHECK(first >= fifth);
+}
+
+TEST_CASE("test CMyString operator <<")
+{
+	const char* str = "Hello";
+	CMyString first(str);
+	std::ostringstream strm;
+	strm << first;
+	CHECK(str == strm.str());
+}
+
+TEST_CASE("test CMyString operator >>")
+{
+	const char* str = "Hello";
+	CMyString first;
+	std::string strTest(str);
+	std::istringstream strm(strTest);
+	strm >> first;
+	CHECK(strcmp(first.GetStringData(), str) == 0);
+}
+
+

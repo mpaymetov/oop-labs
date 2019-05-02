@@ -9,27 +9,22 @@ CMyString::CMyString()
 	m_start->next = m_end;
 }
 
-// конструктор, инициализирующий строку данными строки
-// с завершающим нулевым символом
 CMyString::CMyString(const char* pString)
 	: m_start(std::make_shared<CMyChar>())
 	, m_end(std::make_shared<CMyChar>())
 {
 	m_length = strlen(pString);
-
-	auto temp = m_start;
+	auto ptr = m_start;
 	for (size_t i = 0; i < m_length; ++i)
 	{
 		auto charElem = std::make_shared<CMyChar>();
 		charElem->data = pString[i];
-		temp->next = charElem;
-		temp = charElem;
+		ptr->next = charElem;
+		ptr = charElem;
 	}
-	temp->next = m_end;
+	ptr->next = m_end;
 }
 
-// конструктор, инициализирующий строку данными из
-// символьного массива заданной длины
 CMyString::CMyString(const char* pString, size_t length)
 	: m_start(std::make_shared<CMyChar>())
 	, m_end(std::make_shared<CMyChar>())
@@ -37,47 +32,47 @@ CMyString::CMyString(const char* pString, size_t length)
 	size_t strLength = strlen(pString);
 	m_length = (length < strLength) ? length : strLength;
 
-	auto temp = m_start;
+	auto ptr = m_start;
 	for (size_t i = 0; i < m_length; ++i)
 	{
 		auto charElem = std::make_shared<CMyChar>();
 		charElem->data = pString[i];
-		temp->next = charElem;
-		temp = charElem;
+		ptr->next = charElem;
+		ptr = charElem;
 	}
-	temp->next = m_end;
+	ptr->next = m_end;
 }
 
-// конструктор копирования
 CMyString::CMyString(CMyString const& other)
 	: m_start(std::make_shared<CMyChar>())
 	, m_end(std::make_shared<CMyChar>())
 {
-	const char* pString = other.GetStringData();
-	m_length = strlen(pString);
+	m_length = other.m_length;
 
-	auto temp = m_start;
+	auto ptr = m_start;
+	auto ptrOther = other.m_start->next;
 	for (size_t i = 0; i < m_length; ++i)
 	{
 		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = pString[i];
-		temp->next = charElem;
-		temp = charElem;
+		charElem->data = ptrOther->data;
+		ptr->next = charElem;
+		ptr = charElem;
+		ptrOther = ptrOther->next;
 	}
-	temp->next = m_end;
+	ptr->next = m_end;
 }
 
-// перемещающий конструктор (для компиляторов, совместимых с C++11)
-//  реализуется совместно с перемещающим оператором присваивания
 CMyString::CMyString(CMyString&& other)
 	: m_start(other.m_start)
 	, m_end(other.m_end)
 	, m_length(other.m_length)
 {
+	other.m_start = std::make_shared<CMyChar>();
+	other.m_end = std::make_shared<CMyChar>();
+	other.m_start->next = other.m_end;
+	other.m_length = 0;
 }
 
-// конструктор, инициализирующий строку данными из
-// строки стандартной библиотеки C++
 CMyString::CMyString(std::string const& stlString)
 	: m_start(std::make_shared<CMyChar>())
 	, m_end(std::make_shared<CMyChar>())
@@ -95,20 +90,15 @@ CMyString::CMyString(std::string const& stlString)
 	temp->next = m_end;
 }
 
-// деструктор класса - освобождает память, занимаемую символами строки
 CMyString::~CMyString()
 {
 }
 
-// возвращает длину строки (без учета завершающего нулевого символа)
 size_t CMyString::GetLength() const
 {
 	return m_length;
 }
 
-// возвращает указатель на массив символов строки.
-// В конце массива обязательно должен быть завершающий нулевой символ
-// даже если строка пустая
 const char* CMyString::GetStringData() const
 {
 	char* result = new char[m_length + 1];
@@ -125,27 +115,24 @@ const char* CMyString::GetStringData() const
 	return result;
 }
 
-// возвращает подстроку с заданной позиции длиной не больше length символов
 CMyString CMyString::SubString(size_t start, size_t length) const
 {
+	if (start >= m_length)
+	{
+		throw std::out_of_range("index is out of range of string");
+	}
+
 	size_t l_length;
 	auto temp = m_start->next;
 
-	if (start < m_length)
-	{
-		size_t t_length = m_length - start;
-		l_length = (length < t_length) ? length : t_length;
+	size_t t_length = m_length - start;
+	l_length = (length < t_length) ? length : t_length;
 
-		size_t i = 0;
-		while (i < start)
-		{
-			temp = temp->next;
-			++i;
-		}
-	}
-	else
+	size_t i = 0;
+	while (i < start)
 	{
-		l_length = 0;
+		temp = temp->next;
+		++i;
 	}
 
 	size_t j = 0;
@@ -162,7 +149,6 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 	return result;
 }
 
-// очистка строки (строка становится снова нулевой длины)
 void CMyString::Clear()
 {
 	m_length = 0;
@@ -171,18 +157,19 @@ void CMyString::Clear()
 
 CMyString& CMyString::operator=(CMyString const& other)
 {
-	m_length = other.GetLength();
-	const char* pString = other.GetStringData();
+	m_length = other.m_length;
 
-	auto temp = m_start;
+	auto ptrOther = other.m_start->next;
+	auto ptr = m_start;
 	for (size_t i = 0; i < m_length; ++i)
 	{
 		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = pString[i];
-		temp->next = charElem;
-		temp = charElem;
+		charElem->data = ptrOther->data;
+		ptr->next = charElem;
+		ptr = charElem;
+		ptrOther = ptrOther->next;
 	}
-	temp->next = m_end;
+	ptr->next = m_end;
 
 	return *this;
 }
@@ -191,6 +178,9 @@ CMyString& CMyString::operator=(CMyString&& other)
 {
 	m_start = other.m_start;
 	m_end = other.m_end;
+	other.m_start = std::make_shared<CMyChar>();
+	other.m_end = std::make_shared<CMyChar>();
+	other.m_start->next = other.m_end;
 	return *this;
 }
 
@@ -216,49 +206,218 @@ CMyString& CMyString::operator+=(CMyString const& other)
 
 CMyString const operator+(CMyString const& string1, CMyString const& string2)
 {
-	std::string str1(string1.GetStringData());
-	std::string str2(string2.GetStringData());
-	std::string str3 = str1 + str2;
-	CMyString result(str3);
+	CMyString result(string1);
+	result += string2;
 	return result;
+}
+
+const char& CMyString::operator[](size_t index) const
+{
+	if (index >= m_length)
+	{
+		throw std::out_of_range("index is out of range of string");
+	}
+
+	auto ptr = m_start->next;
+	for (size_t i = 0; i < index; ++i)
+	{
+		ptr = ptr->next;
+	}
+	return ptr->data;
+}
+
+char& CMyString::operator[](size_t index)
+{
+	if (index >= m_length)
+	{
+		throw std::out_of_range("index is out of range of string");
+	}
+
+	auto ptr = m_start->next;
+	for (size_t i = 0; i < index; ++i)
+	{
+		ptr = ptr->next;
+	}
+	return ptr->data;
 }
 
 bool const operator==(CMyString const& string1, CMyString const& string2)
 {
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	if (strLength1 != strLength2)
+	{
+		return false;
+	}
+
+	for (size_t i = 0; i < strLength1; ++i)
+	{
+		if (string1[i] != string2[i])
+		{
+			return false;
+		}
+	}
+
 	return true;
 }
 
 bool const operator!=(CMyString const& string1, CMyString const& string2)
 {
-	return true;
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	if (strLength1 != strLength2)
+	{
+		return true;
+	}
+
+	for (size_t i = 0; i < strLength1; ++i)
+	{
+		if (string1[i] != string2[i])
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool const operator<(CMyString const& string1, CMyString const& string2)
 {
-	return true;
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
+
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (string1[i] == string2[i])
+		{
+			continue;
+		}
+		else if (string1[i] < string2[i])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (strLength1 < strLength2)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool const operator>(CMyString const& string1, CMyString const& string2)
 {
-	return true;
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
+
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (string1[i] == string2[i])
+		{
+			continue;
+		}
+		else if (string1[i] > string2[i])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (strLength1 > strLength2)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool const operator<=(CMyString const& string1, CMyString const& string2)
 {
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
+
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (string1[i] == string2[i])
+		{
+			continue;
+		}
+		else if (string1[i] < string2[i])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (strLength1 > strLength2)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 bool const operator>=(CMyString const& string1, CMyString const& string2)
 {
+	size_t strLength1 = string1.GetLength();
+	size_t strLength2 = string2.GetLength();
+	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
+
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (string1[i] == string2[i])
+		{
+			continue;
+		}
+		else if (string1[i] > string2[i])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	if (strLength1 < strLength2)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 std::ostream& operator<<(std::ostream& strm, CMyString const& myStr)
 {
+	auto ptr = myStr.m_start->next;
+
+	while (ptr->next != nullptr)
+	{
+		strm << ptr->data;
+		ptr = ptr->next;
+	}
+
 	return strm;
 }
 
 std::istream& operator>>(std::istream& strm, CMyString& myStr)
 {
+	std::string str;
+	strm >> str;
+	myStr = CMyString(str);
 	return strm;
 }
