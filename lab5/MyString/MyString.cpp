@@ -157,30 +157,35 @@ void CMyString::Clear()
 
 CMyString& CMyString::operator=(CMyString const& other)
 {
-	m_length = other.m_length;
-
-	auto ptrOther = other.m_start->next;
-	auto ptr = m_start;
-	for (size_t i = 0; i < m_length; ++i)
+	if (m_start != other.m_start)
 	{
-		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = ptrOther->data;
-		ptr->next = charElem;
-		ptr = charElem;
-		ptrOther = ptrOther->next;
-	}
-	ptr->next = m_end;
+		m_length = other.m_length;
 
+		auto ptrOther = other.m_start->next;
+		auto ptr = m_start;
+		for (size_t i = 0; i < m_length; ++i)
+		{
+			auto charElem = std::make_shared<CMyChar>();
+			charElem->data = ptrOther->data;
+			ptr->next = charElem;
+			ptr = charElem;
+			ptrOther = ptrOther->next;
+		}
+		ptr->next = m_end;
+	}
 	return *this;
 }
 
 CMyString& CMyString::operator=(CMyString&& other)
 {
-	m_start = other.m_start;
-	m_end = other.m_end;
-	other.m_start = std::make_shared<CMyChar>();
-	other.m_end = std::make_shared<CMyChar>();
-	other.m_start->next = other.m_end;
+	if (m_start != other.m_start)
+	{
+		m_start = other.m_start;
+		m_end = other.m_end;
+		other.m_start = std::make_shared<CMyChar>();
+		other.m_end = std::make_shared<CMyChar>();
+		other.m_start->next = other.m_end;
+	}
 	return *this;
 }
 
