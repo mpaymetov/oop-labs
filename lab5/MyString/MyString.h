@@ -1,13 +1,6 @@
 #pragma once
 #include "stdafx.h"
 
-class CMyChar
-{
-public:
-	char data = '\0';
-	std::shared_ptr<CMyChar> next = nullptr;
-};
-
 class CMyString
 {
 public:
@@ -37,9 +30,7 @@ public:
 	friend std::istream& operator>>(std::istream& strm, CMyString& myStr);
 
 private:
-	std::shared_ptr<CMyChar> m_start;
-	std::shared_ptr<CMyChar> m_end;
-
+	char* m_chars;
 	size_t m_length;
 };
 
@@ -51,4 +42,3 @@ bool const operator<(CMyString const& string1, CMyString const& string2);
 bool const operator>(CMyString const& string1, CMyString const& string2);
 bool const operator<=(CMyString const& string1, CMyString const& string2);
 bool const operator>=(CMyString const& string1, CMyString const& string2);
-

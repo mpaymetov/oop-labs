@@ -2,96 +2,69 @@
 #include "MyString.h"
 
 CMyString::CMyString()
-	: m_start(std::make_shared<CMyChar>())
-	, m_end(std::make_shared<CMyChar>())
-	, m_length(0)
+	: m_length(0)
 {
-	m_start->next = m_end;
+	m_chars = new char[1];
+	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(const char* pString)
-	: m_start(std::make_shared<CMyChar>())
-	, m_end(std::make_shared<CMyChar>())
 {
 	m_length = strlen(pString);
-	auto ptr = m_start;
+	m_chars = new char[m_length + 1];
 	for (size_t i = 0; i < m_length; ++i)
 	{
-		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = pString[i];
-		ptr->next = charElem;
-		ptr = charElem;
+		m_chars[i] = pString[i];
 	}
-	ptr->next = m_end;
+	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(const char* pString, size_t length)
-	: m_start(std::make_shared<CMyChar>())
-	, m_end(std::make_shared<CMyChar>())
+	: m_length(length)
 {
-	size_t strLength = strlen(pString);
-	m_length = (length < strLength) ? length : strLength;
-
-	auto ptr = m_start;
+	m_chars = new char[m_length + 1];
 	for (size_t i = 0; i < m_length; ++i)
 	{
-		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = pString[i];
-		ptr->next = charElem;
-		ptr = charElem;
+		m_chars[i] = pString[i];
 	}
-	ptr->next = m_end;
+	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(CMyString const& other)
-	: m_start(std::make_shared<CMyChar>())
-	, m_end(std::make_shared<CMyChar>())
+	: m_length(other.m_length)
 {
-	m_length = other.m_length;
-
-	auto ptr = m_start;
-	auto ptrOther = other.m_start->next;
+	m_chars = new char[m_length + 1];
 	for (size_t i = 0; i < m_length; ++i)
 	{
-		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = ptrOther->data;
-		ptr->next = charElem;
-		ptr = charElem;
-		ptrOther = ptrOther->next;
+		m_chars[i] = other.m_chars[i];
 	}
-	ptr->next = m_end;
+	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(CMyString&& other)
-	: m_start(other.m_start)
-	, m_end(other.m_end)
-	, m_length(other.m_length)
+	: m_length(other.m_length)
 {
-	other.m_start = std::make_shared<CMyChar>();
-	other.m_end = std::make_shared<CMyChar>();
-	other.m_start->next = other.m_end;
+	m_chars = other.m_chars;
+
 	other.m_length = 0;
+	other.m_chars = new char[other.m_length + 1];
+	other.m_chars[other.m_length] = '\0';
 }
 
 CMyString::CMyString(std::string const& stlString)
-	: m_start(std::make_shared<CMyChar>())
-	, m_end(std::make_shared<CMyChar>())
+	: m_length(stlString.size())
 {
-	m_length = stlString.size();
-
-	auto temp = m_start;
+	m_chars = new char[m_length + 1];
 	for (size_t i = 0; i < m_length; ++i)
 	{
-		auto charElem = std::make_shared<CMyChar>();
-		charElem->data = stlString[i];
-		temp->next = charElem;
-		temp = charElem;
+		m_chars[i] = stlString[i];
 	}
-	temp->next = m_end;
+	m_chars[m_length] = '\0';
 }
 
 CMyString::~CMyString()
 {
+	delete m_chars;
 }
 
 size_t CMyString::GetLength() const
@@ -101,18 +74,7 @@ size_t CMyString::GetLength() const
 
 const char* CMyString::GetStringData() const
 {
-	char* result = new char[m_length + 1];
-	auto temp = m_start->next;
-	size_t i = 0;
-
-	while (temp != nullptr)
-	{
-		result[i] = temp->data;
-		temp = temp->next;
-		++i;
-	}
-
-	return result;
+	return m_chars;
 }
 
 CMyString CMyString::SubString(size_t start, size_t length) const
@@ -122,28 +84,15 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 		throw std::out_of_range("index is out of range of string");
 	}
 
-	size_t l_length;
-	auto temp = m_start->next;
+	size_t lengthEnd = m_length - start;
+	size_t lengthReal = (lengthEnd < length) ? lengthEnd : length;
 
-	size_t t_length = m_length - start;
-	l_length = (length < t_length) ? length : t_length;
-
-	size_t i = 0;
-	while (i < start)
+	char* str = new char[lengthReal + 1];
+	for (size_t i = 0; i < lengthReal; ++i)
 	{
-		temp = temp->next;
-		++i;
+		str[i] = m_chars[i + start];
 	}
-
-	size_t j = 0;
-	char* str = new char[l_length + 1];
-	while (j < l_length)
-	{
-		str[j] = temp->data;
-		temp = temp->next;
-		++j;
-	}
-	str[l_length] = '\0';
+	str[lengthReal] = '\0';
 
 	CMyString result(str);
 	return result;
@@ -152,59 +101,52 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 void CMyString::Clear()
 {
 	m_length = 0;
-	m_start->next = m_end;
+	m_chars = (char*)realloc(m_chars, 1);
+	m_chars[m_length] = '\0';
 }
 
 CMyString& CMyString::operator=(CMyString const& other)
 {
-	if (m_start != other.m_start)
+	if (m_chars != other.m_chars)
 	{
-		m_length = other.m_length;
+		if (void* mem = std::realloc(m_chars, other.m_length + 1))
+			m_chars = static_cast<char*>(mem);
+		else
+			throw std::bad_alloc();
 
-		auto ptrOther = other.m_start->next;
-		auto ptr = m_start;
-		for (size_t i = 0; i < m_length; ++i)
-		{
-			auto charElem = std::make_shared<CMyChar>();
-			charElem->data = ptrOther->data;
-			ptr->next = charElem;
-			ptr = charElem;
-			ptrOther = ptrOther->next;
-		}
-		ptr->next = m_end;
+		m_length = other.m_length;
+		std::memcpy(m_chars, other.m_chars, other.m_length);
+		m_chars[m_length] = '\0';
 	}
+
 	return *this;
 }
 
 CMyString& CMyString::operator=(CMyString&& other)
 {
-	if (m_start != other.m_start)
+	if (m_chars != other.m_chars)
 	{
-		m_start = other.m_start;
-		m_end = other.m_end;
-		other.m_start = std::make_shared<CMyChar>();
-		other.m_end = std::make_shared<CMyChar>();
-		other.m_start->next = other.m_end;
+		m_length = other.m_length;
+		m_chars = other.m_chars;
+
+		other.m_length = 0;
+		other.m_chars = new char[other.m_length + 1];
+		other.m_chars[other.m_length] = '\0';
 	}
+
 	return *this;
 }
 
 CMyString& CMyString::operator+=(CMyString const& other)
 {
-	size_t length = other.GetLength();
-	const char* pString = other.GetStringData();
+	if (void* mem = std::realloc(m_chars, m_length + other.m_length + 1))
+		m_chars = static_cast<char*>(mem);
+	else
+		throw std::bad_alloc();
 
-	m_length += length;
-	auto temp = m_end;
-
-	for (size_t i = 0; i < length; ++i)
-	{
-		temp->data = pString[i];
-		auto charElem = std::make_shared<CMyChar>();
-		temp->next = charElem;
-		temp = charElem;
-	}
-	m_end = temp;
+	std::memcpy(m_chars + m_length, other.m_chars, other.m_length);
+	m_length = m_length + other.m_length;
+	m_chars[m_length] = '\0';
 
 	return *this;
 }
@@ -223,12 +165,7 @@ const char& CMyString::operator[](size_t index) const
 		throw std::out_of_range("index is out of range of string");
 	}
 
-	auto ptr = m_start->next;
-	for (size_t i = 0; i < index; ++i)
-	{
-		ptr = ptr->next;
-	}
-	return ptr->data;
+	return m_chars[index];
 }
 
 char& CMyString::operator[](size_t index)
@@ -238,24 +175,17 @@ char& CMyString::operator[](size_t index)
 		throw std::out_of_range("index is out of range of string");
 	}
 
-	auto ptr = m_start->next;
-	for (size_t i = 0; i < index; ++i)
-	{
-		ptr = ptr->next;
-	}
-	return ptr->data;
+	return m_chars[index];
 }
 
 bool const operator==(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	if (strLength1 != strLength2)
+	if (string1.GetLength() != string2.GetLength())
 	{
 		return false;
 	}
 
-	for (size_t i = 0; i < strLength1; ++i)
+	for (size_t i = 0; i < string1.GetLength(); ++i)
 	{
 		if (string1[i] != string2[i])
 		{
@@ -268,14 +198,12 @@ bool const operator==(CMyString const& string1, CMyString const& string2)
 
 bool const operator!=(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	if (strLength1 != strLength2)
+	if (string1.GetLength() != string2.GetLength())
 	{
 		return true;
 	}
 
-	for (size_t i = 0; i < strLength1; ++i)
+	for (size_t i = 0; i < string1.GetLength(); ++i)
 	{
 		if (string1[i] != string2[i])
 		{
@@ -288,27 +216,20 @@ bool const operator!=(CMyString const& string1, CMyString const& string2)
 
 bool const operator<(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
-
+	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
 	for (size_t i = 0; i < length; ++i)
 	{
-		if (string1[i] == string2[i])
-		{
-			continue;
-		}
-		else if (string1[i] < string2[i])
+		if (string1[i] < string2[i])
 		{
 			return true;
 		}
-		else
+		else if (string1[i] > string2[i])
 		{
 			return false;
 		}
 	}
 
-	if (strLength1 < strLength2)
+	if (string1.GetLength() < string2.GetLength())
 	{
 		return true;
 	}
@@ -318,27 +239,20 @@ bool const operator<(CMyString const& string1, CMyString const& string2)
 
 bool const operator>(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
-
+	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
 	for (size_t i = 0; i < length; ++i)
 	{
-		if (string1[i] == string2[i])
-		{
-			continue;
-		}
-		else if (string1[i] > string2[i])
+		if (string1[i] > string2[i])
 		{
 			return true;
 		}
-		else
+		else if (string1[i] < string2[i])
 		{
 			return false;
 		}
 	}
 
-	if (strLength1 > strLength2)
+	if (string1.GetLength() > string2.GetLength())
 	{
 		return true;
 	}
@@ -348,72 +262,55 @@ bool const operator>(CMyString const& string1, CMyString const& string2)
 
 bool const operator<=(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
-
+	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
 	for (size_t i = 0; i < length; ++i)
 	{
-		if (string1[i] == string2[i])
-		{
-			continue;
-		}
-		else if (string1[i] < string2[i])
+		if (string1[i] < string2[i])
 		{
 			return true;
 		}
-		else
+		else if (string1[i] > string2[i])
 		{
 			return false;
 		}
 	}
 
-	if (strLength1 > strLength2)
+	if (string1.GetLength() <= string2.GetLength())
 	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool const operator>=(CMyString const& string1, CMyString const& string2)
 {
-	size_t strLength1 = string1.GetLength();
-	size_t strLength2 = string2.GetLength();
-	size_t length = (strLength1 < strLength2) ? strLength1 : strLength2;
-
+	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
 	for (size_t i = 0; i < length; ++i)
 	{
-		if (string1[i] == string2[i])
-		{
-			continue;
-		}
-		else if (string1[i] > string2[i])
+		if (string1[i] > string2[i])
 		{
 			return true;
 		}
-		else
+		else if (string1[i] < string2[i])
 		{
 			return false;
 		}
 	}
 
-	if (strLength1 < strLength2)
+	if (string1.GetLength() >= string2.GetLength())
 	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 std::ostream& operator<<(std::ostream& strm, CMyString const& myStr)
 {
-	auto ptr = myStr.m_start->next;
-
-	while (ptr->next != nullptr)
+	for (size_t i = 0; i < myStr.GetLength(); ++i)
 	{
-		strm << ptr->data;
-		ptr = ptr->next;
+		strm << myStr[i];
 	}
 
 	return strm;
@@ -423,6 +320,7 @@ std::istream& operator>>(std::istream& strm, CMyString& myStr)
 {
 	std::string str;
 	strm >> str;
-	myStr = CMyString(str);
+	myStr = str;
 	return strm;
 }
+
