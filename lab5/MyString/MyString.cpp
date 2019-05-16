@@ -1,6 +1,28 @@
 #include "stdafx.h"
 #include "MyString.h"
 
+int CompareStrings(CMyString const& string1, CMyString const& string2)
+{
+	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
+	int cmp = std::memcmp(string1.GetStringData(), string2.GetStringData(), length);
+
+	if (cmp != 0)
+	{
+		return cmp;
+	}
+
+	if (string1.GetLength() < string2.GetLength())
+	{
+		return -1;
+	}
+	else if (string1.GetLength() > string2.GetLength())
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
 CMyString::CMyString()
 	: m_length(0)
 {
@@ -25,7 +47,7 @@ CMyString::CMyString(CMyString const& other)
 {
 }
 
-CMyString::CMyString(CMyString&& other)
+CMyString::CMyString(CMyString&& other) noexcept
 	: m_length(other.m_length)
 {
 	m_chars = other.m_chars;
@@ -37,6 +59,13 @@ CMyString::CMyString(CMyString&& other)
 CMyString::CMyString(std::string const& stlString)
 	: CMyString(stlString.c_str(), stlString.size())
 {
+}
+
+CMyString::CMyString(size_t size)
+	: m_length(size)
+{
+	m_chars = new char[m_length + 1];
+	m_chars[m_length] = '\0';
 }
 
 CMyString::~CMyString()
@@ -79,14 +108,9 @@ CMyString& CMyString::operator=(CMyString const& other)
 {
 	if (m_chars != other.m_chars)
 	{
-		m_length = other.m_length;
-		char* chars = new char[m_length + 1];
-
-		std::memcpy(chars, other.m_chars, m_length);
-		chars[m_length] = '\0';
-
-		std::swap(m_chars, chars);
-		delete chars;
+		CMyString copy(other);
+		std::swap(m_length, copy.m_length);
+		std::swap(m_chars, copy.m_chars);
 	}
 
 	return *this;
@@ -108,22 +132,22 @@ CMyString& CMyString::operator=(CMyString&& other)
 
 CMyString& CMyString::operator+=(CMyString const& other)
 {
-	if (void* mem = std::realloc(m_chars, m_length + other.m_length + 1))
-		m_chars = static_cast<char*>(mem);
-	else
-		throw std::bad_alloc();
-
-	std::memcpy(m_chars + m_length, other.m_chars, other.m_length);
-	m_length = m_length + other.m_length;
-	m_chars[m_length] = '\0';
+	CMyString result(m_length + other.m_length);
+	
+	std::memcpy(result.m_chars, m_chars, m_length);
+	std::memcpy(result.m_chars + m_length, other.m_chars, other.m_length);
+	
+	std::swap(m_length, result.m_length);
+	std::swap(m_chars, result.m_chars);
 
 	return *this;
 }
 
 CMyString const operator+(CMyString const& string1, CMyString const& string2)
 {
-	CMyString result(string1);
-	result += string2;
+	CMyString result(string1.GetLength() + string2.GetLength());
+	std::memcpy(result.m_chars, string1.m_chars, string1.m_length);
+	std::memcpy(result.m_chars + string1.m_length, string2.m_chars, string2.m_length);
 	return result;
 }
 
@@ -149,32 +173,32 @@ char& CMyString::operator[](size_t index)
 
 bool const operator==(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) == 0;
+	return CompareStrings(string1, string2) == 0;
 }
 
 bool const operator!=(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) != 0;
+	return CompareStrings(string1, string2) != 0;
 }
 
 bool const operator<(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) < 0;
+	return CompareStrings(string1, string2) < 0;
 }
 
 bool const operator>(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) > 0;
+	return CompareStrings(string1, string2) > 0;
 }
 
 bool const operator<=(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) <= 0;
+	return CompareStrings(string1, string2) <= 0;
 }
 
 bool const operator>=(CMyString const& string1, CMyString const& string2)
 {
-	return std::strcmp(string1.GetStringData(), string2.GetStringData()) >= 0;
+	return CompareStrings(string1, string2) >= 0;
 }
 
 std::ostream& operator<<(std::ostream& strm, CMyString const& myStr)
@@ -194,4 +218,3 @@ std::istream& operator>>(std::istream& strm, CMyString& myStr)
 	myStr = str;
 	return strm;
 }
-
