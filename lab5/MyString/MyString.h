@@ -26,9 +26,6 @@ public:
 
 	void Clear();
 
-	friend std::ostream& operator<<(std::ostream& strm, CMyString const& myStr);
-	friend std::istream& operator>>(std::istream& strm, CMyString& myStr);
-
 private:
 	char* m_chars;
 	size_t m_length;
@@ -42,3 +39,6 @@ bool const operator<(CMyString const& string1, CMyString const& string2);
 bool const operator>(CMyString const& string1, CMyString const& string2);
 bool const operator<=(CMyString const& string1, CMyString const& string2);
 bool const operator>=(CMyString const& string1, CMyString const& string2);
+
+std::ostream& operator<<(std::ostream& strm, CMyString const& myStr);
+std::istream& operator>>(std::istream& strm, CMyString& myStr);
