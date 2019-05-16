@@ -4,41 +4,25 @@
 CMyString::CMyString()
 	: m_length(0)
 {
-	m_chars = new char[1];
-	m_chars[m_length] = '\0';
+	m_chars = nullptr;
 }
 
 CMyString::CMyString(const char* pString)
+	: CMyString(pString, strlen(pString))
 {
-	m_length = strlen(pString);
-	m_chars = new char[m_length + 1];
-	for (size_t i = 0; i < m_length; ++i)
-	{
-		m_chars[i] = pString[i];
-	}
-	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(const char* pString, size_t length)
 	: m_length(length)
 {
 	m_chars = new char[m_length + 1];
-	for (size_t i = 0; i < m_length; ++i)
-	{
-		m_chars[i] = pString[i];
-	}
+	std::memcpy(m_chars, pString, m_length);
 	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(CMyString const& other)
-	: m_length(other.m_length)
+	: CMyString(other.GetStringData(), other.GetLength())
 {
-	m_chars = new char[m_length + 1];
-	for (size_t i = 0; i < m_length; ++i)
-	{
-		m_chars[i] = other.m_chars[i];
-	}
-	m_chars[m_length] = '\0';
 }
 
 CMyString::CMyString(CMyString&& other)
@@ -47,19 +31,12 @@ CMyString::CMyString(CMyString&& other)
 	m_chars = other.m_chars;
 
 	other.m_length = 0;
-	other.m_chars = new char[other.m_length + 1];
-	other.m_chars[other.m_length] = '\0';
+	other.m_chars = nullptr;
 }
 
 CMyString::CMyString(std::string const& stlString)
-	: m_length(stlString.size())
+	: CMyString(stlString.c_str(), stlString.size())
 {
-	m_chars = new char[m_length + 1];
-	for (size_t i = 0; i < m_length; ++i)
-	{
-		m_chars[i] = stlString[i];
-	}
-	m_chars[m_length] = '\0';
 }
 
 CMyString::~CMyString()
@@ -74,7 +51,7 @@ size_t CMyString::GetLength() const
 
 const char* CMyString::GetStringData() const
 {
-	return m_chars;
+	return m_chars ? m_chars : "";
 }
 
 CMyString CMyString::SubString(size_t start, size_t length) const
@@ -87,36 +64,29 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 	size_t lengthEnd = m_length - start;
 	size_t lengthReal = (lengthEnd < length) ? lengthEnd : length;
 
-	char* str = new char[lengthReal + 1];
-	for (size_t i = 0; i < lengthReal; ++i)
-	{
-		str[i] = m_chars[i + start];
-	}
-	str[lengthReal] = '\0';
-
-	CMyString result(str);
+	CMyString result(m_chars + start, lengthReal);
 	return result;
 }
 
 void CMyString::Clear()
 {
 	m_length = 0;
-	m_chars = (char*)realloc(m_chars, 1);
-	m_chars[m_length] = '\0';
+	delete m_chars;
+	m_chars = nullptr;
 }
 
 CMyString& CMyString::operator=(CMyString const& other)
 {
 	if (m_chars != other.m_chars)
 	{
-		if (void* mem = std::realloc(m_chars, other.m_length + 1))
-			m_chars = static_cast<char*>(mem);
-		else
-			throw std::bad_alloc();
-
 		m_length = other.m_length;
-		std::memcpy(m_chars, other.m_chars, other.m_length);
-		m_chars[m_length] = '\0';
+		char* chars = new char[m_length + 1];
+
+		std::memcpy(chars, other.m_chars, m_length);
+		chars[m_length] = '\0';
+
+		std::swap(m_chars, chars);
+		delete chars;
 	}
 
 	return *this;
@@ -130,8 +100,7 @@ CMyString& CMyString::operator=(CMyString&& other)
 		m_chars = other.m_chars;
 
 		other.m_length = 0;
-		other.m_chars = new char[other.m_length + 1];
-		other.m_chars[other.m_length] = '\0';
+		other.m_chars = nullptr;
 	}
 
 	return *this;
@@ -180,130 +149,32 @@ char& CMyString::operator[](size_t index)
 
 bool const operator==(CMyString const& string1, CMyString const& string2)
 {
-	if (string1.GetLength() != string2.GetLength())
-	{
-		return false;
-	}
-
-	for (size_t i = 0; i < string1.GetLength(); ++i)
-	{
-		if (string1[i] != string2[i])
-		{
-			return false;
-		}
-	}
-
-	return true;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) == 0;
 }
 
 bool const operator!=(CMyString const& string1, CMyString const& string2)
 {
-	if (string1.GetLength() != string2.GetLength())
-	{
-		return true;
-	}
-
-	for (size_t i = 0; i < string1.GetLength(); ++i)
-	{
-		if (string1[i] != string2[i])
-		{
-			return true;
-		}
-	}
-
-	return false;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) != 0;
 }
 
 bool const operator<(CMyString const& string1, CMyString const& string2)
 {
-	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
-	for (size_t i = 0; i < length; ++i)
-	{
-		if (string1[i] < string2[i])
-		{
-			return true;
-		}
-		else if (string1[i] > string2[i])
-		{
-			return false;
-		}
-	}
-
-	if (string1.GetLength() < string2.GetLength())
-	{
-		return true;
-	}
-
-	return false;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) < 0;
 }
 
 bool const operator>(CMyString const& string1, CMyString const& string2)
 {
-	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
-	for (size_t i = 0; i < length; ++i)
-	{
-		if (string1[i] > string2[i])
-		{
-			return true;
-		}
-		else if (string1[i] < string2[i])
-		{
-			return false;
-		}
-	}
-
-	if (string1.GetLength() > string2.GetLength())
-	{
-		return true;
-	}
-
-	return false;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) > 0;
 }
 
 bool const operator<=(CMyString const& string1, CMyString const& string2)
 {
-	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
-	for (size_t i = 0; i < length; ++i)
-	{
-		if (string1[i] < string2[i])
-		{
-			return true;
-		}
-		else if (string1[i] > string2[i])
-		{
-			return false;
-		}
-	}
-
-	if (string1.GetLength() <= string2.GetLength())
-	{
-		return true;
-	}
-
-	return false;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) <= 0;
 }
 
 bool const operator>=(CMyString const& string1, CMyString const& string2)
 {
-	size_t length = (string1.GetLength() < string2.GetLength()) ? string1.GetLength() : string2.GetLength();
-	for (size_t i = 0; i < length; ++i)
-	{
-		if (string1[i] > string2[i])
-		{
-			return true;
-		}
-		else if (string1[i] < string2[i])
-		{
-			return false;
-		}
-	}
-
-	if (string1.GetLength() >= string2.GetLength())
-	{
-		return true;
-	}
-
-	return false;
+	return std::strcmp(string1.GetStringData(), string2.GetStringData()) >= 0;
 }
 
 std::ostream& operator<<(std::ostream& strm, CMyString const& myStr)
