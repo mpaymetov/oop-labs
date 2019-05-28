@@ -154,3 +154,204 @@ TEST_CASE("test MyArray resize if new size > capacity")
 	CHECK(first[4] == 0);
 	CHECK(first[5] == 0);
 }
+
+TEST_CASE("test MyArray method begin()")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+}
+
+TEST_CASE("test MyArray postfix increment")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	it++;
+	CHECK(*it == 2);
+}
+
+TEST_CASE("test MyArray prefix increment")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	++it;
+	CHECK(*it == 2);
+}
+
+TEST_CASE("test MyArray method end(), prefix & postfix decrement")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.end();
+	--it;
+	CHECK(*it == 2);
+	it--;
+	CHECK(*it == 1);
+}
+
+TEST_CASE("test MyArray method rbegin()")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.rbegin();
+	CHECK(*it == 2);
+	it++;
+	CHECK(*it == 1);
+}
+
+TEST_CASE("test MyArray method rend()")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.rend();
+	--it;
+	CHECK(*it == 1);
+	it--;
+	CHECK(*it == 2);
+}
+
+TEST_CASE("test MyArray iterator + offset")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	intArr.Append(3);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	CHECK(*(it + 2) == 3);
+}
+
+TEST_CASE("test MyArray iterator += offset")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	intArr.Append(3);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	it += 2;
+	CHECK(*it == 3);
+}
+
+TEST_CASE("test MyArray iterator operator[]")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	intArr.Append(3);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	CHECK(it[2] == 3);
+}
+
+TEST_CASE("test MyArray iterator operator=")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	intArr.Append(3);
+	auto it = intArr.begin();
+	auto newIt = intArr.end();
+	newIt = it;
+	CHECK(*newIt == 1);
+}
+
+struct two_int_nums
+{
+	int first;
+	int second;
+};
+
+TEST_CASE("test MyArray iterator operator->")
+{
+	two_int_nums nums = {1, 2};
+	CMyArray<two_int_nums> arr;
+	arr.Append(nums);
+	auto it = arr.begin();
+	CHECK(it->first == 1);
+	CHECK(it->second == 2);
+}
+
+TEST_CASE("test MyArray iterator operator-=")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.end();
+	it -= 2;
+	CHECK(*it == 1);
+}
+
+TEST_CASE("test MyArray iterator operator - offset")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto it = intArr.end();
+	auto newIt = it - 2;
+	CHECK(*newIt == 1);
+}
+
+TEST_CASE("test MyArray iterator operator-")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	auto itBegin = intArr.begin();
+	auto itEnd = intArr.end();
+	auto offset = itEnd - itBegin;
+	CHECK(offset == 2);
+}
+
+TEST_CASE("test MyArray of string")
+{
+	CMyArray<std::string> strArr;
+	std::string first = "first";
+	std::string second = "second";
+	std::string third = "third";
+	strArr.Append(first);
+	strArr.Append(second);
+	strArr.Append(third);
+
+	CHECK(strArr[0] == "first");
+	CHECK(strArr[1] == "second");
+	CHECK(strArr[2] == "third");
+
+	auto it = strArr.begin();
+	CHECK(*it == "first");
+	CHECK(*(it + 1) == "second");
+	CHECK(it[2] == "third");
+
+	it++;
+	CHECK(*it == "second");
+
+	int i = 0;
+	for (auto it = strArr.begin(); it < strArr.end(); ++it)
+	{
+		CHECK(*it == strArr[i]);
+		++i;
+	}
+
+	i = 0;
+	for (auto str : strArr)
+	{
+		CHECK(str == strArr[i]);
+		++i;
+	}
+
+	CMyArray<std::string> arrCopy;
+	arrCopy.Resize(strArr.GetSize());
+	std::copy(strArr.begin(), strArr.end(), arrCopy.begin());
+	CHECK(arrCopy[2] == "third");
+}

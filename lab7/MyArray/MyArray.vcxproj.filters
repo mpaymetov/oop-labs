@@ -32,5 +32,8 @@
     <ClInclude Include="MyArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

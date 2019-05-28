@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "MyIterator.h"
 
 template <typename T>
 class CMyArray
@@ -127,11 +128,11 @@ public:
 		{
 			auto newBegin = RawAlloc(newSize);
 			auto newEnd = newBegin;
-			auto m_endOfCapacity = newBegin + newSize;
+			auto newEndOfCapacity = newBegin + newSize;
 			try
 			{
 				CopyItems(m_begin, m_end, newBegin, newEnd);
-				while (newEnd < m_endOfCapacity)
+				while (newEnd < newEndOfCapacity)
 				{
 					new (newEnd) T();
 					++newEnd;
@@ -147,7 +148,7 @@ public:
 
 			m_begin = newBegin;
 			m_end = newEnd;
-			m_endOfCapacity = m_endOfCapacity;
+			m_endOfCapacity = newEndOfCapacity;
 		}
 	}
 
@@ -190,6 +191,72 @@ public:
 	{
 		DeleteItems(m_begin, m_end);
 	}
+
+	using iterator = CMyIterator<T>;
+	using const_iterator = CMyIterator<const T>;
+
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using reverse_const_iterator = std::reverse_iterator<const_iterator>;
+
+	iterator begin()
+	{
+		return iterator(m_begin);
+	}
+
+	iterator end()
+	{
+		return iterator(m_end);
+	}
+
+	iterator begin() const
+	{
+		return const_iterator(m_begin);
+	}
+
+	iterator end() const
+	{
+		return const_iterator(m_end);
+	}
+
+	const_iterator const cbegin() const
+	{
+		return const_iterator(m_begin);
+	};
+
+	const_iterator const cend() const
+	{
+		return const_iterator(m_end);
+	};
+
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator(iterator(m_end));
+	}
+
+	reverse_iterator rend()
+	{
+		return reverse_iterator(iterator(m_begin));
+	}
+
+	reverse_iterator rbegin() const
+	{
+		return reverse_const_iterator(const_iterator(m_end));
+	}
+
+	reverse_iterator rend() const
+	{
+		return reverse_const_iterator(const_iterator(m_begin));
+	}
+
+	reverse_const_iterator const crbegin() const
+	{
+		return reverse_const_iterator(const_iterator(m_end));
+	};
+
+	reverse_const_iterator const crend() const
+	{
+		return reverse_const_iterator(const_iterator(m_begin));
+	};
 
 private:
 	static void DeleteItems(T* begin, T* end)
