@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MyString.h"
+#include "MyIterator.h"
 
 int CompareStrings(CMyString const& string1, CMyString const& string2)
 {
@@ -23,7 +24,7 @@ int CompareStrings(CMyString const& string1, CMyString const& string2)
 	return 0;
 }
 
-CMyString::CMyString()
+CMyString::CMyString() noexcept
 	: m_length(0)
 {
 	m_chars = nullptr;
@@ -68,17 +69,17 @@ CMyString::CMyString(size_t size)
 	m_chars[m_length] = '\0';
 }
 
-CMyString::~CMyString()
+CMyString::~CMyString() noexcept
 {
 	delete m_chars;
 }
 
-size_t CMyString::GetLength() const
+size_t CMyString::GetLength() const noexcept
 {
 	return m_length;
 }
 
-const char* CMyString::GetStringData() const
+const char* CMyString::GetStringData() const noexcept
 {
 	return m_chars ? m_chars : "";
 }
@@ -97,7 +98,7 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 	return result;
 }
 
-void CMyString::Clear()
+void CMyString::Clear() noexcept
 {
 	m_length = 0;
 	delete m_chars;
@@ -116,7 +117,7 @@ CMyString& CMyString::operator=(CMyString const& other)
 	return *this;
 }
 
-CMyString& CMyString::operator=(CMyString&& other)
+CMyString& CMyString::operator=(CMyString&& other) noexcept
 {
 	if (m_chars != other.m_chars)
 	{
@@ -218,3 +219,44 @@ std::istream& operator>>(std::istream& strm, CMyString& myStr)
 	myStr = str;
 	return strm;
 }
+
+CMyString::iterator CMyString::begin()
+{
+	return iterator(m_chars);
+}
+
+CMyString::iterator CMyString::end()
+{
+	return iterator(m_chars + m_length);
+}
+
+CMyString::const_iterator const CMyString::cbegin() const
+{
+	return const_iterator(m_chars);
+}
+
+CMyString::const_iterator const CMyString::cend() const
+{
+	return const_iterator(m_chars + m_length);
+}
+
+CMyString::reverse_iterator CMyString::rbegin()
+{
+	return reverse_iterator(iterator(m_chars + m_length));
+}
+
+CMyString::reverse_iterator CMyString::rend()
+{
+	return reverse_iterator(iterator(m_chars));
+}
+
+CMyString::reverse_const_iterator const CMyString::crbegin() const
+{
+	return reverse_const_iterator(const_iterator(m_chars + m_length));
+}
+
+CMyString::reverse_const_iterator const CMyString::crend() const
+{
+	return reverse_const_iterator(const_iterator(m_chars));
+}
+
