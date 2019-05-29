@@ -27,7 +27,7 @@ public:
 		}
 	}
 
-	CMyArray(CMyArray&& arr)
+	CMyArray(CMyArray&& arr) noexcept
 		: m_begin(arr.m_begin)
 		, m_end(arr.m_end)
 		, m_endOfCapacity(arr.m_endOfCapacity)
@@ -152,7 +152,7 @@ public:
 		}
 	}
 
-	void Clear()
+	void Clear() noexcept
 	{
 		DestroyItems(m_begin, m_end);
 		m_end = m_begin;
@@ -171,7 +171,7 @@ public:
 		return *this;
 	}
 
-	CMyArray& operator=(CMyArray&& rhs)
+	CMyArray& operator=(CMyArray&& rhs) noexcept
 	{
 		if (m_begin != rhs.m_begin)
 		{
@@ -187,7 +187,7 @@ public:
 		return *this;
 	}
 
-	~CMyArray()
+	~CMyArray() noexcept
 	{
 		DeleteItems(m_begin, m_end);
 	}
