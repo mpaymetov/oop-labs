@@ -4,8 +4,10 @@
 TEST_CASE("variable can have value")
 {
 	CVariable var;
-	CHECK(!var.HaveValue());
+	double result = var.GetValue();
+	CHECK(std::isnan(result));
 	var.SetValue(3.1415);
-	CHECK(var.HaveValue());
-	CHECK(var.GetValue() == 3.1415);
+	result = var.GetValue();
+	CHECK(!std::isnan(result));
+	CHECK(result == 3.1415);
 };

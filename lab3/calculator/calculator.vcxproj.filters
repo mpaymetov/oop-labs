@@ -33,10 +33,10 @@
     <ClInclude Include="Operator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CalcControl.h">
+    <ClInclude Include="ValueRetriever.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ValueRetriever.h">
+    <ClInclude Include="UserInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,7 +56,7 @@
     <ClCompile Include="Calculator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CalcControl.cpp">
+    <ClCompile Include="UserInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

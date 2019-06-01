@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "calcControl.h"
+#include "UserInterface.h"
 #include "Calculator.h"
 
 int main()
 {
 	CCalculator calculator;
-	CCalcControl calcControl(calculator, std::cin, std::cout);
+	CUserInterface userInterface(calculator, std::cin, std::cout);
 
 	while (!std::cin.eof() && !std::cin.fail())
 	{
 		std::cout << "> ";
-		if (!calcControl.ExecuteCommand())
+		if (!userInterface.ExecuteCommand())
 		{
 			std::cout << "Unknown command!" << std::endl;
 		}

@@ -21,9 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\calculator\CalcControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\calculator\Calculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -39,6 +36,9 @@
     <ClInclude Include="..\calculator\ValueRetriever.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\calculator\UserInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,9 +48,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\calculator\CalcControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\calculator\Calculator.cpp">
@@ -66,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FunctionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\calculator\UserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterfaceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
