@@ -65,17 +65,11 @@ TEST_CASE("test copy constructor MyArray")
 	CHECK(second[0] == 1.25);
 }
 
-CMyArray<int> ReturnCopy(CMyArray<int>& other)
-{
-	CMyArray<int> copy(other);
-	return copy;
-}
-
 TEST_CASE("test MyArray move constructor")
 {
 	CMyArray<int> intArr;
 	intArr.Append(25);
-	CMyArray<int> second = ReturnCopy(intArr);
+	CMyArray<int> second(std::move(intArr));
 	CHECK(second.GetSize() == 1);
 	CHECK(second[0] == 25);
 }
@@ -100,7 +94,7 @@ TEST_CASE("test MyArray operator move =")
 	first.Append(2);
 
 	CMyArray<int> second;
-	second = ReturnCopy(first);
+	second = std::move(first);
 	CHECK(second[0] == 1);
 	CHECK(second[1] == 2);
 	CHECK(second.GetSize() == 2);
@@ -275,7 +269,7 @@ struct two_int_nums
 
 TEST_CASE("test MyArray iterator operator->")
 {
-	two_int_nums nums = {1, 2};
+	two_int_nums nums = { 1, 2 };
 	CMyArray<two_int_nums> arr;
 	arr.Append(nums);
 	auto it = arr.begin();
@@ -355,3 +349,16 @@ TEST_CASE("test MyArray of string")
 	std::copy(strArr.begin(), strArr.end(), arrCopy.begin());
 	CHECK(arrCopy[2] == "third");
 }
+
+TEST_CASE("test MyArray copy to const iterator")
+{
+	CMyArray<int> arr;
+	arr.Append(5);
+	CMyArray<int>::iterator it = arr.begin();
+	
+	CMyArray<int>::const_iterator cit;
+	cit = it;
+	auto num = *cit;
+	CHECK(num == 5);
+}
+

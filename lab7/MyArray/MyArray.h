@@ -192,8 +192,8 @@ public:
 		DeleteItems(m_begin, m_end);
 	}
 
-	using iterator = CMyIterator<T>;
-	using const_iterator = CMyIterator<const T>;
+	using iterator = CMyIterator<T, false>;
+	using const_iterator = CMyIterator<T, true>;
 
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using reverse_const_iterator = std::reverse_iterator<const_iterator>;

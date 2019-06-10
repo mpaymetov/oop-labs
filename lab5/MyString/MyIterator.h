@@ -1,11 +1,13 @@
 #pragma once
 #include <assert.h>
 
-template <typename T>
-class CMyIterator : public std::iterator<std::random_access_iterator_tag, T>
+template <typename T, bool IsConst>
+class CMyIterator
 {
 private:
-	friend class CMyString;
+	template <typename T>
+	friend class CMyArray;
+	friend class CMyIterator<T, true>;
 
 	CMyIterator(T* ptr)
 		: m_ptr(ptr)
@@ -13,30 +15,34 @@ private:
 	}
 
 public:
-	CMyIterator()
+	using MyType = CMyIterator<T, IsConst>;
+	using value_type = std::conditional_t<IsConst, const T, T>;
+	using reference = value_type&;
+	using pointer = value_type*;
+	using difference_type = ptrdiff_t;
+	using iterator_category = std::random_access_iterator_tag;
+
+	CMyIterator() = default;
+	CMyIterator(const CMyIterator<T, false>& other)
+		: m_ptr(other.m_ptr)
 	{
 	}
 
-	CMyIterator(const CMyIterator& it)
-		: m_ptr(it.m_ptr)
+	reference& operator*() const
 	{
-	}
-
-	T& operator*() const
-	{
-		assert(m_ptr);
+//		assert(m_ptr);
 		return *m_ptr;
 	}
 
-	T* operator->() const
+	pointer operator->() const
 	{
-		assert(m_ptr);
+//		assert(m_ptr);
 		return &(operator*());
 	}
 
-	T& operator[](ptrdiff_t index) const
+	reference& operator[](ptrdiff_t index) const
 	{
-		assert(m_ptr + index);
+//		assert(m_ptr + index);
 		return *(m_ptr + index);
 	}
 
@@ -49,7 +55,7 @@ public:
 	CMyIterator& operator++()
 	{
 		++m_ptr;
-		assert(m_ptr);
+//		assert(m_ptr);
 		return *this;
 	}
 
@@ -63,14 +69,14 @@ public:
 	{
 		CMyIterator copy(*this);
 		++m_ptr;
-		assert(m_ptr);
+//		assert(m_ptr);
 		return copy;
 	}
 
 	CMyIterator const operator+(ptrdiff_t offset) const
 	{
 		auto newPtr = m_ptr + offset;
-		assert(newPtr);
+//		assert(newPtr);
 		return CMyIterator(newPtr);
 	}
 
@@ -83,7 +89,7 @@ public:
 	CMyIterator& operator-=(ptrdiff_t offset)
 	{
 		m_ptr -= offset;
-		assert(m_ptr);
+//		assert(m_ptr);
 		return *this;
 	}
 
@@ -91,14 +97,14 @@ public:
 	{
 		CMyIterator copy(*this);
 		--m_ptr;
-		assert(m_ptr);
+//		assert(m_ptr);
 		return copy;
 	}
 
 	CMyIterator const operator-(ptrdiff_t offset) const
 	{
 		auto newPtr = m_ptr - offset;
-		assert(newPtr);
+//		assert(newPtr);
 		return CMyIterator(newPtr);
 	}
 
