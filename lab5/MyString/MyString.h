@@ -29,8 +29,8 @@ public:
 
 	void Clear() noexcept;
 
-	using iterator = CMyIterator<char>;
-	using const_iterator = CMyIterator<const char>;
+	using iterator = CMyIterator<char, false>;
+	using const_iterator = CMyIterator<char, true>;
 
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using reverse_const_iterator = std::reverse_iterator<const_iterator>;

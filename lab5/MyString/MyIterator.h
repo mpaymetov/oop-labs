@@ -5,8 +5,7 @@ template <typename T, bool IsConst>
 class CMyIterator
 {
 private:
-	template <typename T>
-	friend class CMyArray;
+	friend class CMyString;
 	friend class CMyIterator<T, true>;
 
 	CMyIterator(T* ptr)
@@ -30,19 +29,16 @@ public:
 
 	reference& operator*() const
 	{
-//		assert(m_ptr);
 		return *m_ptr;
 	}
 
 	pointer operator->() const
 	{
-//		assert(m_ptr);
 		return &(operator*());
 	}
 
 	reference& operator[](ptrdiff_t index) const
 	{
-//		assert(m_ptr + index);
 		return *(m_ptr + index);
 	}
 
@@ -55,7 +51,6 @@ public:
 	CMyIterator& operator++()
 	{
 		++m_ptr;
-//		assert(m_ptr);
 		return *this;
 	}
 
@@ -69,14 +64,12 @@ public:
 	{
 		CMyIterator copy(*this);
 		++m_ptr;
-//		assert(m_ptr);
 		return copy;
 	}
 
 	CMyIterator const operator+(ptrdiff_t offset) const
 	{
 		auto newPtr = m_ptr + offset;
-//		assert(newPtr);
 		return CMyIterator(newPtr);
 	}
 
@@ -89,7 +82,6 @@ public:
 	CMyIterator& operator-=(ptrdiff_t offset)
 	{
 		m_ptr -= offset;
-//		assert(m_ptr);
 		return *this;
 	}
 
@@ -97,14 +89,12 @@ public:
 	{
 		CMyIterator copy(*this);
 		--m_ptr;
-//		assert(m_ptr);
 		return copy;
 	}
 
 	CMyIterator const operator-(ptrdiff_t offset) const
 	{
 		auto newPtr = m_ptr - offset;
-//		assert(newPtr);
 		return CMyIterator(newPtr);
 	}
 

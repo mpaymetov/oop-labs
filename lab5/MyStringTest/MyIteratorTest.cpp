@@ -177,3 +177,14 @@ TEST_CASE("test CMyIterator operator range-based for")
 	}
 }
 
+TEST_CASE("test CMyIterator assignment iterator to const iterator")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	CMyString::iterator it = str.begin();
+	CMyString::const_iterator cit;
+	cit = it;
+	auto ch = *cit;
+	CHECK(ch == 'H');
+}
+
