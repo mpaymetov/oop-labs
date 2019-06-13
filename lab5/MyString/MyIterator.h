@@ -29,39 +29,33 @@ public:
 
 	reference& operator*() const
 	{
+		assert(m_ptr);
 		return *m_ptr;
-	}
-
-	pointer operator->() const
-	{
-		return &(operator*());
 	}
 
 	reference& operator[](ptrdiff_t index) const
 	{
+		assert(m_ptr);
 		return *(m_ptr + index);
-	}
-
-	CMyIterator& operator=(const CMyIterator& it)
-	{
-		m_ptr = it.m_ptr;
-		return *this;
 	}
 
 	CMyIterator& operator++()
 	{
+		assert(m_ptr);
 		++m_ptr;
 		return *this;
 	}
 
 	CMyIterator& operator+=(ptrdiff_t offset)
 	{
+		assert(m_ptr);
 		m_ptr += offset;
 		return *this;
 	}
 
 	CMyIterator const operator++(int)
 	{
+		assert(m_ptr);
 		CMyIterator copy(*this);
 		++m_ptr;
 		return copy;
@@ -69,24 +63,28 @@ public:
 
 	CMyIterator const operator+(ptrdiff_t offset) const
 	{
+		assert(m_ptr);
 		auto newPtr = m_ptr + offset;
 		return CMyIterator(newPtr);
 	}
 
 	CMyIterator& operator--()
 	{
+		assert(m_ptr);
 		--m_ptr;
 		return *this;
 	}
 
 	CMyIterator& operator-=(ptrdiff_t offset)
 	{
+		assert(m_ptr);
 		m_ptr -= offset;
 		return *this;
 	}
 
 	CMyIterator const operator--(int)
 	{
+		assert(m_ptr);
 		CMyIterator copy(*this);
 		--m_ptr;
 		return copy;
@@ -94,12 +92,15 @@ public:
 
 	CMyIterator const operator-(ptrdiff_t offset) const
 	{
+		assert(m_ptr);
 		auto newPtr = m_ptr - offset;
 		return CMyIterator(newPtr);
 	}
 
 	ptrdiff_t const operator-(CMyIterator const& other) const
 	{
+		assert(m_ptr);
+		assert(other.m_ptr);
 		ptrdiff_t result = m_ptr - other.m_ptr;
 		return result;
 	}
@@ -137,4 +138,12 @@ public:
 private:
 	T* m_ptr = nullptr;
 };
+
+template <typename T, bool IsConst>
+CMyIterator<T, IsConst> operator+(ptrdiff_t offset, CMyIterator<T, IsConst> const& it)
+{
+	auto copy = it;
+	copy += offset;
+	return copy;
+}
 

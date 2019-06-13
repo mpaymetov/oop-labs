@@ -69,6 +69,16 @@ TEST_CASE("test CMyIterator operator + offset")
 	CHECK(*secondIt == 'o');
 }
 
+TEST_CASE("test CMyIterator offset + operator")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	auto firstIt = str.begin();
+	auto secondIt = str.end();
+	secondIt = 4 + firstIt;
+	CHECK(*secondIt == 'o');
+}
+
 TEST_CASE("test CMyIterator operator -=")
 {
 	const char* pString = "Hello";
@@ -187,4 +197,53 @@ TEST_CASE("test CMyIterator assignment iterator to const iterator")
 	auto ch = *cit;
 	CHECK(ch == 'H');
 }
+
+TEST_CASE("test MyString iterator operator==")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	CMyString::iterator it1 = str.begin();
+	CMyString::iterator it2 = str.begin();
+	CMyString::iterator it3 = str.end();
+	CHECK(it1 == it2);
+	CHECK(!(it1 == it3));
+}
+
+TEST_CASE("test MyString iterator operator>")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	CMyString::iterator it1 = str.begin();
+	CMyString::iterator it2 = str.begin();
+	CMyString::iterator it3 = str.end();
+	CHECK(!(it1 > it2));
+	CHECK(!(it1 > it3));
+	CHECK(it3 > it2);
+}
+
+TEST_CASE("test MyString iterator operator>=")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	CMyString::iterator it1 = str.begin();
+	CMyString::iterator it2 = str.begin();
+	CMyString::iterator it3 = str.end();
+	CHECK(it1 >= it2);
+	CHECK(!(it1 >= it3));
+	CHECK(it3 >= it2);
+}
+
+TEST_CASE("test MyString iterator operator<=")
+{
+	const char* pString = "Hello";
+	CMyString str(pString);
+	CMyString::iterator it1 = str.begin();
+	CMyString::iterator it2 = str.begin();
+	CMyString::iterator it3 = str.end();
+	CHECK(it1 <= it2);
+	CHECK(it1 <= it3);
+	CHECK(!(it3 <= it2));
+}
+
+
 
