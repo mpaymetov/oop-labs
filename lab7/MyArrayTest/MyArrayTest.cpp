@@ -226,6 +226,17 @@ TEST_CASE("test MyArray iterator + offset")
 	CHECK(*(it + 2) == 3);
 }
 
+TEST_CASE("test MyArray offset + iterator")
+{
+	CMyArray<int> intArr;
+	intArr.Append(1);
+	intArr.Append(2);
+	intArr.Append(3);
+	auto it = intArr.begin();
+	CHECK(*it == 1);
+	CHECK(*(2 + it) == 3);
+}
+
 TEST_CASE("test MyArray iterator += offset")
 {
 	CMyArray<int> intArr;
@@ -360,5 +371,56 @@ TEST_CASE("test MyArray copy to const iterator")
 	cit = it;
 	auto num = *cit;
 	CHECK(num == 5);
+}
+
+TEST_CASE("test MyArray iterator operator==")
+{
+	CMyArray<int> arr;
+	arr.Append(5);
+	arr.Append(6);
+	CMyArray<int>::iterator it1 = arr.begin();
+	CMyArray<int>::iterator it2 = arr.begin();
+	CMyArray<int>::iterator it3 = arr.end();
+	CHECK(it1 == it2);
+	CHECK(!(it1 == it3));
+}
+
+TEST_CASE("test MyArray iterator operator>")
+{
+	CMyArray<int> arr;
+	arr.Append(5);
+	arr.Append(6);
+	CMyArray<int>::iterator it1 = arr.begin();
+	CMyArray<int>::iterator it2 = arr.begin();
+	CMyArray<int>::iterator it3 = arr.end();
+	CHECK(!(it1 > it2));
+	CHECK(!(it1 > it3));
+	CHECK(it3 > it2);
+}
+
+TEST_CASE("test MyArray iterator operator>=")
+{
+	CMyArray<int> arr;
+	arr.Append(5);
+	arr.Append(6);
+	CMyArray<int>::iterator it1 = arr.begin();
+	CMyArray<int>::iterator it2 = arr.begin();
+	CMyArray<int>::iterator it3 = arr.end();
+	CHECK(it1 >= it2);
+	CHECK(!(it1 >= it3));
+	CHECK(it3 >= it2);
+}
+
+TEST_CASE("test MyArray iterator operator<=")
+{
+	CMyArray<int> arr;
+	arr.Append(5);
+	arr.Append(6);
+	CMyArray<int>::iterator it1 = arr.begin();
+	CMyArray<int>::iterator it2 = arr.begin();
+	CMyArray<int>::iterator it3 = arr.end();
+	CHECK(it1 <= it2);
+	CHECK(it1 <= it3);
+	CHECK(!(it3 <= it2));
 }
 
