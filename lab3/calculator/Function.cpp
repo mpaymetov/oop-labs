@@ -6,6 +6,7 @@ CFunction::CFunction(std::shared_ptr<IValueRetriever> first, COperator mathOpera
 	, m_secondOperand(second)
 	, m_operator(mathOperator)
 {
+	Update();
 }
 
 CFunction::CFunction(std::shared_ptr<IValueRetriever> first)
@@ -13,58 +14,63 @@ CFunction::CFunction(std::shared_ptr<IValueRetriever> first)
 	, m_secondOperand(nullptr)
 	, m_operator(COperator::Undefined)
 {
+	Update();
 }
 
 double CFunction::GetValue() const
 {
-	double result = std::nan("1");
+	return m_value;
+}
+
+void CFunction::Update()
+{
 	double val1 = m_firstOperand->GetValue();
 	if (!std::isnan(val1))
 	{
 		switch (m_operator)
 		{
-		case COperator::Addition:
-		{
-			double val2 = m_secondOperand->GetValue();
-			if (!std::isnan(val2))
+			case COperator::Addition:
 			{
-				result = val1 + val2;
+				double val2 = m_secondOperand->GetValue();
+				if (!std::isnan(val2))
+				{
+					m_value = val1 + val2;
+				}
+				break;
 			}
-			break;
-		}
-		case COperator::Subtraction:
-		{
-			double val2 = m_secondOperand->GetValue();
-			if (!std::isnan(val2))
+			case COperator::Subtraction:
 			{
-				result = val1 - val2;
+				double val2 = m_secondOperand->GetValue();
+				if (!std::isnan(val2))
+				{
+					m_value = val1 - val2;
+				}
+				break;
 			}
-			break;
-		}
-		case COperator::Multiplication:
-		{
-			double val2 = m_secondOperand->GetValue();
-			if (!std::isnan(val2))
+			case COperator::Multiplication:
 			{
-				result = val1 * val2;
+				double val2 = m_secondOperand->GetValue();
+				if (!std::isnan(val2))
+				{
+					m_value = val1 * val2;
+				}
+				break;
 			}
-			break;
-		}
-		case COperator::Division:
-		{
-			double val2 = m_secondOperand->GetValue();
-			if (!std::isnan(val2) && (val2 != 0))
+			case COperator::Division:
 			{
-				result = val1 / val2;
+				double val2 = m_secondOperand->GetValue();
+				if (!std::isnan(val2) && (val2 != 0))
+				{
+					m_value = val1 / val2;
+				}
+				break;
 			}
-			break;
-		}
-		case COperator::Undefined:
-		{
-			result = val1;
-			break;
-		}
+			case COperator::Undefined:
+			{
+				m_value = val1;
+				break;
+			}
 		}
 	}
-	return result;
 }
+

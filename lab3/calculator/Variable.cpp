@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Variable.h"
+#include "Function.h"
 
 double CVariable::GetValue() const
 {
@@ -10,3 +11,4 @@ void CVariable::SetValue(double value)
 {
 	m_value = value;
 }
+

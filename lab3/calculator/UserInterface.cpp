@@ -51,8 +51,7 @@ bool CUserInterface::ExecuteCommand()
 
 bool CUserInterface::Var(std::istream& args)
 {
-	std::string identifier;
-	std::string errorMsg;
+	std::string identifier, errorMsg;
 	args >> identifier;
 	if (!m_calculator.SetVar(identifier, errorMsg))
 	{
@@ -63,18 +62,20 @@ bool CUserInterface::Var(std::istream& args)
 
 bool CUserInterface::Let(std::istream& args)
 {
-	std::string identifier, assign, valueStr, errorMsg;
-	args >> identifier >> assign >> valueStr;
+	std::string identifier, valueStr, errorMsg;
 
-	if (assign != "=")
+	std::regex regex("([^ ]+)=([^ ]+)");
+	std::string str;
+	std::cmatch result;
+	args >> str;
+	if (regex_match(str.c_str(), result, regex))
 	{
-		m_output << "do not find '='" << std::endl;
-		return true;
+		identifier = std::string(result[1].first, result[1].second);
+		valueStr = std::string(result[2].first, result[2].second);
 	}
-
-	if (valueStr.empty())
+	else
 	{
-		m_output << "value string is empty" << std::endl;
+		m_output << "error in expression" << std::endl; 
 		return true;
 	}
 
@@ -101,14 +102,29 @@ bool CUserInterface::Let(std::istream& args)
 
 bool CUserInterface::Fn(std::istream& args)
 {
-	std::string identifier, assign, firstOperand, mathOperatorStr, secondOperand, errorMsg;
-	args >> identifier >> assign >> firstOperand >> mathOperatorStr >> secondOperand;
+	std::string identifier, firstOperand, mathOperatorStr, secondOperand, errorMsg;
 
-	if (assign != "=")
+	std::regex regex("([^ ]+)=([^ ]+)([/+/-/*//])([^ ]*)");
+	std::string str;
+	std::cmatch result;
+	args >> str;
+	if (regex_match(str.c_str(), result, regex))
 	{
-		m_output << "do not find '='" << std::endl;
+		identifier = std::string(result[1].first, result[1].second);
+		firstOperand = std::string(result[2].first, result[2].second);
+		mathOperatorStr = std::string(result[3].first, result[3].second);
+		secondOperand = std::string(result[4].first, result[4].second);
+	}
+	else
+	{
+		m_output << "error in expression" << std::endl;
 		return true;
 	}
+
+	std::cout << "identifier: " << identifier << std::endl;
+	std::cout << "firstOperand: " << firstOperand << std::endl;
+	std::cout << "mathOperatorStr: " << mathOperatorStr << std::endl;
+	std::cout << "secondOperand: " << secondOperand << std::endl;
 
 	COperator mathOperator = GetMathOperator(mathOperatorStr);
 

@@ -8,6 +8,7 @@ TEST_CASE("test create function with one operand")
 	double result = fn.GetValue();
 	CHECK(std::isnan(result));
 	first->SetValue(3.1415);
+	fn.Update();
 	result = fn.GetValue();
 	CHECK(!std::isnan(result));
 	CHECK(result == 3.1415);
@@ -36,9 +37,13 @@ TEST_CASE("test create function with two operands")
 	first->SetValue(3);
 	second->SetValue(4);
 	
+	sum.Update();
 	sumResult = sum.GetValue();
+	mult.Update();
 	multResult = mult.GetValue();
+	sub.Update();
 	subResult = sub.GetValue();
+	div.Update();
 	divResult = div.GetValue();
 
 	CHECK(!std::isnan(sumResult));

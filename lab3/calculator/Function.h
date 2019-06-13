@@ -10,9 +10,12 @@ public:
 	CFunction(std::shared_ptr<IValueRetriever> first);
 
 	double GetValue() const override;
+	void Update();
 
 private:
 	std::shared_ptr<IValueRetriever> m_firstOperand;
 	std::shared_ptr<IValueRetriever> m_secondOperand;
 	COperator m_operator;
+
+	double m_value = std::nan("1");
 };

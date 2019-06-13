@@ -1,6 +1,5 @@
 #pragma once
 #include "ValueRetriever.h"
-#include "Operator.h"
 
 class CVariable : public IValueRetriever
 {
