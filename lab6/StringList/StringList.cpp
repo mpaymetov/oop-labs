@@ -8,7 +8,7 @@ CStringList::CStringList()
 	m_endNode = m_lastNode;
 }
 
-CStringList::~CStringList()
+CStringList::~CStringList() noexcept
 {
 	Clear();
 }

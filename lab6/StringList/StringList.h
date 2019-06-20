@@ -20,7 +20,7 @@ class CStringList
 {
 public:
 	CStringList();
-	~CStringList();
+	~CStringList() noexcept;
 
 	void PushFront(std::string& str);
 	void PushBack(std::string& str);
