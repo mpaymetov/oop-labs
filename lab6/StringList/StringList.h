@@ -32,28 +32,37 @@ public:
 	//iterator Emplace(const_iterator pos, Args&& args);
 	//void remove(const_iterator pos);
 
-	//class CIterator
-	//{
-	//	friend CStringList;
-	//	CIterator(Node* node);
+	template <bool IsConst>
+	class CIterator
+	{
+		friend CStringList;
+		friend class CIterator<true>;
+		CIterator(Node* node);
 
-	//public:
-	//	CIterator() = default;
-	//	std::string& operator*() const;
-	//	CIterator& operator++();
+	public:
+		using MyType = CIterator<IsConst>;
+		using value_type = std::conditional_t<IsConst, const Node, Node>;
+		using reference = value_type&;
+		using pointer = value_type*;
+		using difference_type = ptrdiff_t;
+		using iterator_category = std::random_access_iterator_tag;
 
-	//private:
-	//	Node* m_node = nullptr;
-	//};
+		CIterator() = default;
+		std::string& operator*() const;
+		CIterator& operator++();
 
-	//using iterator = CIterator<Node, false>;
-	//using const_iterator = CIterator<Node, true>;
+	private:
+		Node* m_node = nullptr;
+	};
 
-	//using reverse_iterator = std::reverse_iterator<iterator>;
-	//using reverse_const_iterator = std::reverse_iterator<const_iterator>;
+	using iterator = CIterator<false>;
+	using const_iterator = CIterator<true>;
 
-	//iterator begin();
-	//iterator end();
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using reverse_const_iterator = std::reverse_iterator<const_iterator>;
+
+	iterator begin();
+	iterator end();
 	//iterator begin() const;
 	//iterator end() const;
 	//const_iterator cbegin() const;

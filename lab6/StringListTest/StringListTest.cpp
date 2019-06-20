@@ -58,3 +58,14 @@ TEST_CASE("test StringList exception for empty list")
 	CHECK_THROWS_AS(list.GetBackElement(), std::length_error);
 	CHECK_THROWS_AS(list.GetFrontElement(), std::length_error);
 }
+
+TEST_CASE("test StringList iterator begin")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	CStringList::iterator it = list.begin();
+	std::string test = *it;
+	CHECK(test == first);
+}
+

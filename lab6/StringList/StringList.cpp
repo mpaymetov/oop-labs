@@ -23,7 +23,7 @@ void CStringList::PushFront(std::string& str)
 	{
 		m_lastNode = m_firstNode.get();
 	}
-	
+
 	++m_size;
 }
 
@@ -102,26 +102,37 @@ std::string const& CStringList::GetFrontElement() const
 	return m_firstNode->data;
 }
 
-//CStringList::iterator CStringList::begin()
-//{
-//	return iterator(m_firstNode.get());
-//}
-//
-//CStringList::iterator CStringList::end()
-//{
-//	return iterator(m_lastNode);
-//}
-//
+template <bool IsConst>
+CStringList::CIterator<IsConst>::CIterator(Node* node)
+	: m_node(node)
+{
+}
+
+std::string& CStringList::iterator::operator*() const
+{
+	return m_node->data;
+}
+
+CStringList::iterator CStringList::begin()
+{
+	return iterator(m_firstNode.get());
+}
+
+CStringList::iterator CStringList::end()
+{
+	return iterator(m_lastNode);
+}
+
 //CStringList::iterator CStringList::begin() const
 //{
-//	return const_iterator(m_begin);
+//	return const_iterator(m_firstNode.get());
 //}
 //
 //CStringList::iterator CStringList::end() const
 //{
-//	return const_iterator(m_end);
+//	return const_iterator(m_lastNode);
 //}
-//
+
 //CStringList::const_iterator const CStringList::cbegin() const
 //{
 //	return const_iterator(m_begin);
@@ -161,4 +172,3 @@ std::string const& CStringList::GetFrontElement() const
 //{
 //	return reverse_const_iterator(const_iterator(m_begin));
 //};
-
