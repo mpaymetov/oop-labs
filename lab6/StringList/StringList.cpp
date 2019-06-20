@@ -15,8 +15,7 @@ CStringList::~CStringList() noexcept
 
 void CStringList::PushFront(std::string& str)
 {
-	auto newNode = std::make_unique<Node>(str, nullptr, nullptr);
-	newNode->next = std::move(m_firstNode);
+	auto newNode = std::make_unique<Node>(str, nullptr, std::move(m_firstNode));
 	m_firstNode = std::move(newNode);
 	m_firstNode->next->prev = m_firstNode.get();
 
