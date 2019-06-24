@@ -24,7 +24,7 @@
     <ClInclude Include="StringList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Iterator.h">
+    <ClInclude Include="old_Iterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

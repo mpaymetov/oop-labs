@@ -59,13 +59,78 @@ TEST_CASE("test StringList exception for empty list")
 	CHECK_THROWS_AS(list.GetFrontElement(), std::length_error);
 }
 
-TEST_CASE("test StringList iterator begin")
+TEST_CASE("test StringList copy constructor")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList newList = list;
+	CHECK(newList.GetSize() == 2);
+	CHECK(newList.GetFrontElement() == first);
+	CHECK(newList.GetBackElement() == second);
+}
+
+TEST_CASE("test StringList copy operator=")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList newList;
+	newList = list;
+	CHECK(newList.GetSize() == 2);
+	CHECK(newList.GetFrontElement() == first);
+	CHECK(newList.GetBackElement() == second);
+}
+
+TEST_CASE("test StringList move constructor")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList newList = std::move(list);
+	CHECK(list.GetSize() == 0);
+	CHECK(newList.GetSize() == 2);
+	CHECK(newList.GetFrontElement() == first);
+	CHECK(newList.GetBackElement() == second);
+}
+
+TEST_CASE("test StringList move operator=")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList newList;
+	newList = std::move(list);
+	CHECK(list.GetSize() == 0);
+	CHECK(newList.GetSize() == 2);
+	CHECK(newList.GetFrontElement() == first);
+	CHECK(newList.GetBackElement() == second);
+}
+
+TEST_CASE("test StringList iterator begin & end")
 {
 	CStringList list;
 	std::string first = "Hello";
 	list.PushFront(first);
 	CStringList::iterator it = list.begin();
-	std::string test = *it;
-	CHECK(test == first);
+	CHECK(*it == first);
+
+	std::string second = "World";
+	list.PushBack(second);
+	CStringList::iterator endIt = list.end();
+	--endIt;
+	CHECK(*endIt == second);
 }
 

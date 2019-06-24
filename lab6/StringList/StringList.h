@@ -1,33 +1,39 @@
 #pragma once
 #include "stdafx.h"
-//#include "iterator.h"
+#include <assert.h>
 
 class Node
 {
 public:
-	Node(const std::string& data, Node* prev, std::unique_ptr<Node>&& next)
+	Node(const std::string& data, Node* prev, Node* next)
 		: data(data)
 		, prev(prev)
-		, next(std::move(next))
+		, next(next)
 	{
 	}
 	std::string data;
 	Node* prev;
-	std::unique_ptr<Node> next;
+	Node* next;
 };
 
 class CStringList
 {
 public:
-	CStringList();
+	CStringList() noexcept;
+	CStringList(CStringList const& other);
+	CStringList(CStringList&& other) noexcept;
 	~CStringList() noexcept;
 
-	void PushFront(std::string& str);
-	void PushBack(std::string& str);
+	void PushFront(std::string const& str);
+	void PushBack(std::string const& str);
 
 	size_t GetSize() const noexcept;
 	bool IsEmpty() const noexcept;
 	void Clear() noexcept;
+
+	CStringList& operator=(CStringList const& other);
+	CStringList& operator=(CStringList&& other);
+
 
 	//iterator Emplace(const_iterator pos, Args&& args);
 	//void remove(const_iterator pos);
@@ -35,9 +41,13 @@ public:
 	template <bool IsConst>
 	class CIterator
 	{
+	private:
 		friend CStringList;
 		friend class CIterator<true>;
-		CIterator(Node* node);
+		CIterator(Node* node)
+			: m_node(node)
+		{
+		}
 
 	public:
 		using MyType = CIterator<IsConst>;
@@ -48,8 +58,41 @@ public:
 		using iterator_category = std::random_access_iterator_tag;
 
 		CIterator() = default;
-		std::string& operator*() const;
-		CIterator& operator++();
+		CIterator(const CIterator<false>& other)
+			: m_node(other.m_node)
+		{
+		}
+
+		std::string& operator*() const
+		{
+			assert(m_node->next);
+			return m_node->data;
+		}
+
+		CIterator& operator++()
+		{
+			assert(m_node->next);
+			m_node = m_node->next;
+			return *this;
+		}
+
+		CIterator& operator--()
+		{
+			assert(m_node->prev);
+			m_node = m_node->prev;
+			return *this;
+		}
+
+		bool operator==(CIterator const& other) const
+		{
+			return m_node == other.m_node;
+		}
+
+		bool operator!=(CIterator const& other) const
+		{
+			return m_node != other.m_node;
+		}
+
 
 	private:
 		Node* m_node = nullptr;
@@ -82,8 +125,7 @@ public:
 	std::string const& GetFrontElement() const;
 
 private:
+	Node* m_firstNode = nullptr;
+	Node m_endNode = Node("", nullptr, nullptr);
 	size_t m_size = 0;
-	std::unique_ptr<Node> m_firstNode;
-	Node* m_lastNode;
-	Node* m_endNode;
 };
