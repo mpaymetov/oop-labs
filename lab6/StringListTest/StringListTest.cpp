@@ -8,10 +8,25 @@ TEST_CASE("test StringList create empty")
 	CHECK(list.IsEmpty());
 }
 
+TEST_CASE("test StringList PushFront & GetFrontElement")
+{
+	CStringList list;
+
+	std::string first = "Hello";
+	list.PushFront(first);
+	CHECK(list.GetSize() == 1);
+	CHECK(list.GetFrontElement() == first);
+
+	std::string second = "World";
+	list.PushFront(second);
+	CHECK(list.GetSize() == 2);
+	CHECK(list.GetFrontElement() == second);
+}
+
 TEST_CASE("test StringList PushBack & GetBackElement")
 {
 	CStringList list;
-	
+
 	std::string first = "Hello";
 	list.PushBack(first);
 	CHECK(list.GetSize() == 1);
@@ -25,31 +40,25 @@ TEST_CASE("test StringList PushBack & GetBackElement")
 	CHECK(list.GetFrontElement() == first);
 }
 
-TEST_CASE("test StringList IsEmpty")
+TEST_CASE("test StringList IsEmpty, GetSize & Clear")
 {
 	CStringList list;
 	CHECK(list.IsEmpty());
+	CHECK(list.GetSize() == 0);
 
 	std::string first = "Hello";
 	list.PushBack(first);
 	CHECK(!list.IsEmpty());
-}
-
-TEST_CASE("test StringList PushFront")
-{
-	CStringList list;
-
-	std::string first = "Hello";
-	list.PushFront(first);
 	CHECK(list.GetSize() == 1);
-	CHECK(list.GetFrontElement() == first);
-	CHECK(list.GetBackElement() == first);
 
 	std::string second = "World";
-	list.PushFront(second);
+	list.PushBack(second);
 	CHECK(list.GetSize() == 2);
-	CHECK(list.GetFrontElement() == second);
-	CHECK(list.GetBackElement() == first);
+	CHECK(!list.IsEmpty());
+
+	list.Clear();
+	CHECK(list.IsEmpty());
+	CHECK(list.GetSize() == 0);
 }
 
 TEST_CASE("test StringList exception for empty list")
@@ -132,5 +141,118 @@ TEST_CASE("test StringList iterator begin & end")
 	CStringList::iterator endIt = list.end();
 	--endIt;
 	CHECK(*endIt == second);
+}
+
+TEST_CASE("test StringList iterator operator for")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	std::vector<std::string> vstr;
+	vstr.push_back(first);
+	vstr.push_back(second);
+
+	int i = 0;
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		CHECK(*it == vstr[i]);
+		++i;
+	}
+}
+
+TEST_CASE("test StringList iterator operator range based for")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	std::vector<std::string> vstr;
+	vstr.push_back(first);
+	vstr.push_back(second);
+
+	int i = 0;
+	for (auto it : list)
+	{
+		CHECK(it == vstr[i]);
+		++i;
+	}
+}
+
+TEST_CASE("test StringList Emplace to front")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList::iterator it = list.begin();
+	CHECK(*it == first);
+
+	std::string newStr = "new";
+	list.Emplace(it, newStr);
+
+	it = list.begin();
+	CHECK(*it == newStr);
+	++it;
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == second);
+}
+
+TEST_CASE("test StringList Emplace")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList::iterator it = list.begin();
+	++it;
+	CHECK(*it == second);
+
+	std::string newStr = "new";
+	list.Emplace(it, newStr);
+
+	it = list.begin();
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == newStr);
+	++it;
+	CHECK(*it == second);
+}
+
+TEST_CASE("test StringList Remove")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushBack(first);
+	std::string strToRemove = "strToRemove";
+	list.PushBack(strToRemove);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList::iterator it = list.begin();
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == strToRemove);
+	++it;
+	CHECK(*it == second);
+
+	it = list.begin();
+	++it;
+	CHECK(*it == strToRemove);
+	list.Remove(it);
+
+	it = list.begin();
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == second);
 }
 

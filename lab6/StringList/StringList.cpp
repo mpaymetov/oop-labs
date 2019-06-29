@@ -8,42 +8,35 @@ CStringList::CStringList() noexcept
 
 CStringList::CStringList(CStringList const& other)
 {
-	Node* firstNode = &m_endNode;
+	m_firstNode = &m_endNode;
 	Node* otherTemp = other.m_firstNode;
 	Node* newListTemp = nullptr;
-	size_t size = 0;
 
-	while (otherTemp->next != nullptr)
+	try
 	{
-		Node* newNode = nullptr;
-		try
+		while (otherTemp->next)
 		{
-			newNode = new Node(otherTemp->data, newListTemp, nullptr);
-		}
-		catch (std::exception&)
-		{
-		}
+			Node* newNode = new Node(otherTemp->data, newListTemp, &m_endNode);
 
-		if (size == 0)
-		{
-			firstNode = newNode;
-		}
-		else
-		{
-			newListTemp->next = newNode;
-		}
+			if (m_size == 0)
+			{
+				m_firstNode = newNode;
+			}
+			else
+			{
+				newListTemp->next = newNode;
+			}
+			m_endNode.prev = newNode;
+			++m_size;
 
-		newListTemp = newNode;
-		++size;
-		otherTemp = otherTemp->next;
+			newListTemp = newNode;
+			otherTemp = otherTemp->next;
+		}
 	}
-
-	if (size != 0)
+	catch (std::exception&)
 	{
-		m_firstNode = firstNode;
-		m_endNode.prev = newListTemp;
-		newListTemp->next = &m_endNode;
-		m_size = size;
+		Clear();
+		throw;
 	}
 }
 
@@ -146,50 +139,14 @@ std::string const& CStringList::GetFrontElement() const
 
 CStringList& CStringList::operator=(CStringList const& other)
 {
-	Node* firstNode = &m_endNode;
-	Node* otherTemp = other.m_firstNode;
-	Node* newListTemp = nullptr;
-	size_t size = 0;
-
-	while (otherTemp->next != nullptr)
-	{
-		Node* newNode = nullptr;
-		try
-		{
-			newNode = new Node(otherTemp->data, newListTemp, nullptr);
-		}
-		catch (std::exception&)
-		{
-		}
-
-		if (size == 0)
-		{
-			firstNode = newNode;
-		}
-		else
-		{
-			newListTemp->next = newNode;
-		}
-
-		newListTemp = newNode;
-		++size;
-		otherTemp = otherTemp->next;
-	}
-
+	CStringList copy(other);
 	Clear();
-
-	if (size != 0)
-	{
-		m_firstNode = firstNode;
-		m_endNode.prev = newListTemp;
-		newListTemp->next = &m_endNode;
-		m_size = size;
-	}
+	*this = std::move(copy);
 	
 	return *this;
 }
 
-CStringList& CStringList::operator=(CStringList&& other)
+CStringList& CStringList::operator=(CStringList&& other) noexcept
 {
 	m_firstNode = other.m_firstNode;
 	m_size = other.m_size;
@@ -224,25 +181,25 @@ CStringList::iterator CStringList::end()
 //	return const_iterator(&m_endNode);
 //}
 
-//CStringList::const_iterator const CStringList::cbegin() const
-//{
-//	return const_iterator(m_firstNode);
-//};
-//
-//CStringList::const_iterator const CStringList::cend() const
+CStringList::const_iterator CStringList::cbegin() const
+{
+	return const_iterator(m_firstNode);
+};
+
+//CStringList::const_iterator CStringList::cend() const
 //{
 //	return const_iterator(&m_endNode);
 //};
 
-//CStringList::reverse_iterator CStringList::rbegin()
-//{
-//	return reverse_iterator(iterator(m_endNode.prev));
-//}
-//
-//CStringList::reverse_iterator CStringList::rend()
-//{
-//	return reverse_iterator(iterator(m_firstNode));
-//}
+CStringList::reverse_iterator CStringList::rbegin()
+{
+	return reverse_iterator(iterator(m_endNode.prev));
+}
+
+CStringList::reverse_iterator CStringList::rend()
+{
+	return reverse_iterator(iterator(m_firstNode));
+}
 
 //CStringList::reverse_iterator CStringList::rbegin() const
 //{
@@ -263,3 +220,43 @@ CStringList::iterator CStringList::end()
 //{
 //	return reverse_const_iterator(const_iterator(m_begin));
 //};
+
+CStringList::iterator CStringList::Emplace(iterator pos, std::string const& str)
+{
+	Node* newNode = new Node(str, pos.m_node->prev, pos.m_node);
+	
+	if (newNode->prev == nullptr)
+	{
+		m_firstNode = newNode;
+	}
+	else
+	{
+		newNode->prev->next = newNode;
+	}
+
+	newNode->next->prev = newNode;
+	++m_size;
+
+	return iterator(newNode);
+}
+
+void CStringList::Remove(iterator pos)
+{
+	Node* temp = pos.m_node;
+	if (temp->next == nullptr)
+	{
+		throw std::length_error("list is empty");
+	}
+
+	temp->next->prev = temp->prev;
+	if (temp->prev == nullptr)
+	{
+		m_firstNode = temp->next;
+	}
+	else
+	{
+		temp->prev->next = temp->next;
+	}
+	--m_size;
+}
+

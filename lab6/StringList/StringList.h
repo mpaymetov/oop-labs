@@ -31,12 +31,14 @@ public:
 	bool IsEmpty() const noexcept;
 	void Clear() noexcept;
 
+	std::string& GetBackElement();
+	std::string const& GetBackElement() const;
+
+	std::string& GetFrontElement();
+	std::string const& GetFrontElement() const;
+
 	CStringList& operator=(CStringList const& other);
-	CStringList& operator=(CStringList&& other);
-
-
-	//iterator Emplace(const_iterator pos, Args&& args);
-	//void remove(const_iterator pos);
+	CStringList& operator=(CStringList&& other) noexcept;
 
 	template <bool IsConst>
 	class CIterator
@@ -65,12 +67,14 @@ public:
 
 		std::string& operator*() const
 		{
+			assert(m_node);
 			assert(m_node->next);
 			return m_node->data;
 		}
 
 		CIterator& operator++()
 		{
+			assert(m_node);
 			assert(m_node->next);
 			m_node = m_node->next;
 			return *this;
@@ -78,6 +82,7 @@ public:
 
 		CIterator& operator--()
 		{
+			assert(m_node);
 			assert(m_node->prev);
 			m_node = m_node->prev;
 			return *this;
@@ -108,24 +113,21 @@ public:
 	iterator end();
 	//iterator begin() const;
 	//iterator end() const;
-	//const_iterator cbegin() const;
+	const_iterator cbegin() const;
 	//const_iterator cend() const;
 
-	//reverse_iterator rbegin();
-	//reverse_iterator rend();
+	reverse_iterator rbegin();
+	reverse_iterator rend();
 	//reverse_iterator rbegin() const;
 	//reverse_iterator rend() const;
 	//reverse_const_iterator crbegin() const;
 	//reverse_const_iterator crend() const;
 
-	std::string& GetBackElement();
-	std::string const& GetBackElement() const;
-
-	std::string& GetFrontElement();
-	std::string const& GetFrontElement() const;
+	iterator Emplace(iterator pos, std::string const& str);
+	void Remove(iterator pos);
 
 private:
-	Node* m_firstNode = nullptr;
+	Node* m_firstNode;
 	Node m_endNode = Node("", nullptr, nullptr);
 	size_t m_size = 0;
 };
