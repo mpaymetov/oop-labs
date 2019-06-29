@@ -44,8 +44,15 @@ CStringList::CStringList(CStringList&& other) noexcept
 	: m_firstNode(other.m_firstNode)
 	, m_size(other.m_size)
 {
-	m_endNode.prev = other.m_endNode.prev;
-	m_endNode.prev->next = &m_endNode;
+	if (m_size == 0)
+	{
+		m_firstNode = &m_endNode;
+	}
+	else
+	{
+		m_endNode.prev = other.m_endNode.prev;
+		m_endNode.prev->next = &m_endNode;
+	}
 
 	other.m_firstNode = &other.m_endNode;
 	other.m_endNode.prev = nullptr;
@@ -151,8 +158,15 @@ CStringList& CStringList::operator=(CStringList&& other) noexcept
 	m_firstNode = other.m_firstNode;
 	m_size = other.m_size;
 
-	m_endNode.prev = other.m_endNode.prev;
-	m_endNode.prev->next = &m_endNode;
+	if (m_size == 0)
+	{
+		m_firstNode = &m_endNode;
+	}
+	else
+	{
+		m_endNode.prev = other.m_endNode.prev;
+		m_endNode.prev->next = &m_endNode;
+	}
 
 	other.m_firstNode = &other.m_endNode;
 	other.m_endNode.prev = nullptr;

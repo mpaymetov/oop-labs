@@ -183,6 +183,30 @@ TEST_CASE("test StringList iterator operator range based for")
 	}
 }
 
+//TEST_CASE("test StringList iterator stl algorithm")
+//{
+//	CStringList list;
+//	std::string first = "Hello";
+//	list.PushFront(first);
+//	std::string second = "World";
+//	list.PushBack(second);
+//
+//	std::vector<std::string> testVector;
+//	testVector.push_back(first);
+//	testVector.push_back(second);
+//
+//	std::vector<std::string> toVector(list.GetSize());
+//
+//	std::copy(list.begin(), list.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+
+	//int i = 0;
+	//for (auto it : toVector)
+	//{
+	//	CHECK(it == testVector[i]);
+	//	++i;
+	//}
+//}
+
 TEST_CASE("test StringList Emplace to front")
 {
 	CStringList list;
@@ -255,4 +279,25 @@ TEST_CASE("test StringList Remove")
 	++it;
 	CHECK(*it == second);
 }
+
+//TEST_CASE("test StringList revers iterator begin & end")
+//{
+//	CStringList list;
+//	std::string first = "Hello";
+//	list.PushFront(first);
+//	std::string second = "World";
+//	list.PushBack(second);
+//
+//	CStringList::reverse_iterator it = list.rbegin();
+//	std::string test = *it;
+//	CHECK(*it == second);
+//	++it;
+//	CHECK(*it == first);
+//}
+//
+
+
+
+
+
 
