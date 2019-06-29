@@ -24,9 +24,6 @@
     <ClInclude Include="StringList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="old_Iterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StringList.cpp">
