@@ -185,25 +185,15 @@ CStringList::iterator CStringList::end()
 	return iterator(&m_endNode);
 }
 
-//CStringList::iterator CStringList::begin() const
-//{
-//	return const_iterator(m_firstNode);
-//}
-//
-//CStringList::iterator CStringList::end() const
-//{
-//	return const_iterator(&m_endNode);
-//}
-
 CStringList::const_iterator CStringList::cbegin() const
 {
 	return const_iterator(m_firstNode);
 };
 
-//CStringList::const_iterator CStringList::cend() const
-//{
-//	return const_iterator(&m_endNode);
-//};
+CStringList::const_iterator CStringList::cend() const
+{
+	return const_iterator(&m_endNode);
+};
 
 CStringList::reverse_iterator CStringList::rbegin()
 {
@@ -215,25 +205,15 @@ CStringList::reverse_iterator CStringList::rend()
 	return reverse_iterator(iterator(m_firstNode));
 }
 
-//CStringList::reverse_iterator CStringList::rbegin() const
-//{
-//	return reverse_const_iterator(const_iterator(m_end));
-//}
-//
-//CStringList::reverse_iterator CStringList::rend() const
-//{
-//	return reverse_const_iterator(const_iterator(m_begin));
-//}
-//
-//CStringList::reverse_const_iterator const CStringList::crbegin() const
-//{
-//	return reverse_const_iterator(const_iterator(m_end));
-//};
-//
-//CStringList::reverse_const_iterator const CStringList::crend() const
-//{
-//	return reverse_const_iterator(const_iterator(m_begin));
-//};
+CStringList::reverse_const_iterator CStringList::crbegin() const
+{
+	return reverse_const_iterator(const_iterator(m_endNode.prev));
+};
+
+CStringList::reverse_const_iterator CStringList::crend() const
+{
+	return reverse_const_iterator(const_iterator(m_firstNode));
+};
 
 CStringList::iterator CStringList::Emplace(iterator pos, std::string const& str)
 {

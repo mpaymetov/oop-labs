@@ -112,6 +112,14 @@ TEST_CASE("test StringList move constructor")
 	CHECK(newList.GetBackElement() == second);
 }
 
+TEST_CASE("test StringList move constructor for empty list")
+{
+	CStringList list;
+	CStringList newList = std::move(list);
+	CHECK(list.GetSize() == 0);
+	CHECK(newList.GetSize() == 0);
+}
+
 TEST_CASE("test StringList move operator=")
 {
 	CStringList list;
@@ -126,6 +134,15 @@ TEST_CASE("test StringList move operator=")
 	CHECK(newList.GetSize() == 2);
 	CHECK(newList.GetFrontElement() == first);
 	CHECK(newList.GetBackElement() == second);
+}
+
+TEST_CASE("test StringList move operator= for empty list")
+{
+	CStringList list;
+	CStringList newList;
+	newList = std::move(list);
+	CHECK(list.GetSize() == 0);
+	CHECK(newList.GetSize() == 0);
 }
 
 TEST_CASE("test StringList iterator begin & end")
@@ -176,36 +193,31 @@ TEST_CASE("test StringList iterator operator range based for")
 	vstr.push_back(second);
 
 	int i = 0;
-	for (auto it : list)
+	for (auto str : list)
 	{
-		CHECK(it == vstr[i]);
+		CHECK(str == vstr[i]);
 		++i;
 	}
 }
 
-//TEST_CASE("test StringList iterator stl algorithm")
-//{
-//	CStringList list;
-//	std::string first = "Hello";
-//	list.PushFront(first);
-//	std::string second = "World";
-//	list.PushBack(second);
-//
-//	std::vector<std::string> testVector;
-//	testVector.push_back(first);
-//	testVector.push_back(second);
-//
-//	std::vector<std::string> toVector(list.GetSize());
-//
-//	std::copy(list.begin(), list.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
+TEST_CASE("test StringList iterator stl algorithm")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
 
-	//int i = 0;
-	//for (auto it : toVector)
-	//{
-	//	CHECK(it == testVector[i]);
-	//	++i;
-	//}
-//}
+	std::vector<std::string> toVector(list.GetSize());
+	std::copy(list.begin(), list.end(), toVector.begin());
+	CHECK(toVector[0] == first);
+	CHECK(toVector[1] == second);
+
+	std::string testStr = first + " " + second + " ";
+	std::ostringstream ostr;
+	std::copy(list.begin(), list.end(), std::ostream_iterator<std::string>(ostr, " "));
+	CHECK(testStr == ostr.str());
+}
 
 TEST_CASE("test StringList Emplace to front")
 {
@@ -280,24 +292,66 @@ TEST_CASE("test StringList Remove")
 	CHECK(*it == second);
 }
 
-//TEST_CASE("test StringList revers iterator begin & end")
-//{
-//	CStringList list;
-//	std::string first = "Hello";
-//	list.PushFront(first);
-//	std::string second = "World";
-//	list.PushBack(second);
-//
-//	CStringList::reverse_iterator it = list.rbegin();
-//	std::string test = *it;
-//	CHECK(*it == second);
-//	++it;
-//	CHECK(*it == first);
-//}
-//
+TEST_CASE("test StringList Remove front element")
+{
+	CStringList list;
+	std::string strToRemove = "strToRemove";
+	list.PushBack(strToRemove);
+	std::string first = "Hello";
+	list.PushBack(first);
+	std::string second = "World";
+	list.PushBack(second);
 
+	CStringList::iterator it = list.begin();
+	CHECK(*it == strToRemove);
+	++it;
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == second);
 
+	it = list.begin();
+	CHECK(*it == strToRemove);
+	list.Remove(it);
 
+	it = list.begin();
+	CHECK(*it == first);
+	++it;
+	CHECK(*it == second);
+}
 
+TEST_CASE("test StringList can not Remove end iterator")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushBack(first);
 
+	CStringList::iterator it = list.end();
+	CHECK_THROWS_AS(list.Remove(it), std::length_error);
+}
+
+TEST_CASE("test StringList const iterator cbegin & cend")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	CStringList::const_iterator cit = list.cbegin();
+	CHECK(*cit == first);
+
+	std::string second = "World";
+	list.PushBack(second);
+	cit = list.cend();
+	--cit;
+	CHECK(*cit == second);
+}
+
+TEST_CASE("test StringList iterator to const_iterator")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushBack(first);
+
+	CStringList::iterator it = list.begin();
+	CStringList::const_iterator cit = it;
+	CHECK(*cit == first);
+}
 

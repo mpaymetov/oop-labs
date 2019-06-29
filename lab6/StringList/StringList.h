@@ -46,17 +46,14 @@ public:
 	private:
 		friend CStringList;
 		friend class CIterator<true>;
-		CIterator(Node* node)
-			: m_node(node)
-		{
-		}
 
 	public:
 		using MyType = CIterator<IsConst>;
 		using value_type = std::conditional_t<IsConst, const Node, Node>;
-		using reference = value_type&;
+		using return_value_type = std::conditional_t<IsConst, const std::string, std::string>;
+		using reference = return_value_type&;
 		using pointer = value_type*;
-		using difference_type = ptrdiff_t;
+		using difference_type = size_t;
 		using iterator_category = std::random_access_iterator_tag;
 
 		CIterator() = default;
@@ -65,13 +62,13 @@ public:
 		{
 		}
 
-		std::string& operator*() const
+		reference& operator*() const
 		{
 			assert(m_node);
 			assert(m_node->next);
 			return m_node->data;
 		}
-
+		
 		CIterator& operator++()
 		{
 			assert(m_node);
@@ -88,6 +85,25 @@ public:
 			return *this;
 		}
 
+		size_t const operator-(CIterator const& other) const
+		{
+			assert(m_node);
+			assert(other.m_node);
+			
+			size_t result = 0;
+			Node* temp = this->m_node;
+			while ((temp != other.m_node) && temp)
+			{
+				temp = temp->prev;
+				++result;
+			}
+			if (temp != other.m_node)
+			{
+				throw std::length_error("difference error");
+			}
+			return result;
+		}
+
 		bool operator==(CIterator const& other) const
 		{
 			return m_node == other.m_node;
@@ -100,7 +116,12 @@ public:
 
 
 	private:
-		Node* m_node = nullptr;
+		pointer m_node = nullptr;
+
+		CIterator<IsConst>(pointer node)
+			: m_node(node)
+		{
+		}
 	};
 
 	using iterator = CIterator<false>;
@@ -111,17 +132,15 @@ public:
 
 	iterator begin();
 	iterator end();
-	//iterator begin() const;
-	//iterator end() const;
+
 	const_iterator cbegin() const;
-	//const_iterator cend() const;
+	const_iterator cend() const;
 
 	reverse_iterator rbegin();
 	reverse_iterator rend();
-	//reverse_iterator rbegin() const;
-	//reverse_iterator rend() const;
-	//reverse_const_iterator crbegin() const;
-	//reverse_const_iterator crend() const;
+
+	reverse_const_iterator crbegin() const;
+	reverse_const_iterator crend() const;
 
 	iterator Emplace(iterator pos, std::string const& str);
 	void Remove(iterator pos);
