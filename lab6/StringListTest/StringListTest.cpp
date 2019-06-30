@@ -355,3 +355,47 @@ TEST_CASE("test StringList iterator to const_iterator")
 	CHECK(*cit == first);
 }
 
+TEST_CASE("test StringList reverse iterator rbegin & rend")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+	
+	CStringList::reverse_iterator rit = list.rbegin();
+	CHECK(*rit == second);
+
+	rit = list.rend();
+	--rit;
+	CHECK(*rit == first);
+}
+
+TEST_CASE("test StringList const reverse iterator rbegin & rend")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushFront(first);
+	std::string second = "World";
+	list.PushBack(second);
+	
+	CStringList::reverse_const_iterator crit = list.crbegin();
+	CHECK(*crit == second);
+
+	crit = list.crend();
+	--crit;
+	CHECK(*crit == first);
+}
+
+TEST_CASE("test StringList reverse iterator to reverse const_iterator")
+{
+	CStringList list;
+	std::string first = "Hello";
+	list.PushBack(first);
+	std::string second = "World";
+	list.PushBack(second);
+
+	CStringList::reverse_iterator rit = list.rbegin();
+	CStringList::reverse_const_iterator crit = rit;
+	CHECK(*crit == second);
+}

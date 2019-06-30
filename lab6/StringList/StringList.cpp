@@ -197,7 +197,7 @@ CStringList::const_iterator CStringList::cend() const
 
 CStringList::reverse_iterator CStringList::rbegin()
 {
-	return reverse_iterator(iterator(m_endNode.prev));
+	return reverse_iterator(iterator(&m_endNode));
 }
 
 CStringList::reverse_iterator CStringList::rend()
@@ -207,7 +207,7 @@ CStringList::reverse_iterator CStringList::rend()
 
 CStringList::reverse_const_iterator CStringList::crbegin() const
 {
-	return reverse_const_iterator(const_iterator(m_endNode.prev));
+	return reverse_const_iterator(const_iterator(&m_endNode));
 };
 
 CStringList::reverse_const_iterator CStringList::crend() const
