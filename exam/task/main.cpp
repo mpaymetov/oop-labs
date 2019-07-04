@@ -135,8 +135,7 @@ public:
 	void Clear()
 	{
 		m_stream.clear();
-		m_itWrite = m_stream.end();
-		m_itRead = m_stream.end();
+		ResetAll();
 	};
 
 	std::optional<char> Read() override
@@ -146,13 +145,11 @@ public:
 
 	void ResetReadPos()
 	{
-		m_itRead = m_stream.begin();
 		m_inStream.Reset();
 	};
 
 	void ResetWritePos()
 	{
-		m_itWrite = m_stream.begin();
 		m_outStream.Reset();
 	};
 
@@ -164,8 +161,6 @@ public:
 
 private:
 	std::vector<char> m_stream = {};
-	std::vector<char>::iterator m_itRead = m_stream.begin();
-	std::vector<char>::iterator m_itWrite = m_stream.end();
 
 	MemoryOutputStream m_outStream = MemoryOutputStream(&m_stream);
 	MemoryInputStream m_inStream = MemoryInputStream(&m_stream);
@@ -174,7 +169,6 @@ private:
 // Записывает строку в output посимвольно
 void WriteString(IOutputStream& output, const std::string& s)
 {
-	// Написать недостающий код
 	for (auto ch : s)
 	{
 		output.WriteChar(ch);
@@ -184,7 +178,6 @@ void WriteString(IOutputStream& output, const std::string& s)
 // Читает из input посимвольно в строку до конца
 std::string ReadString(IInputStream& input)
 {
-	// Написать недостающий код
 	std::string rezult;
 	while (std::optional<char> ch = input.Read())
 	{
