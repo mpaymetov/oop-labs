@@ -123,30 +123,13 @@ private:
 //   ResetReadPos() - сбрасывает позицию чтения, не меняя содержимое массива
 //   ResetWritePos() - сбрасывает позицию записи, не меняя содержимое массив
 //   ResetAll() - сбрасывает обе позиции, не меняя содержимое массива
-class MemoryStream : public IOutputStream
-	, public IInputStream // Написать недостающий код
+class MemoryStream : public IOutputStream, public IInputStream // Написать недостающий код
 {
 	// Написать недостающий код
 public:
 	void WriteChar(char ch) override
 	{
-		if (m_itWrite == m_stream.end())
-		{
-			try
-			{
-				m_stream.push_back(ch);
-			}
-			catch (std::exception&)
-			{
-				throw std::runtime_error("cant push_back element");
-			}
-			m_itWrite = m_stream.end();
-		}
-		else
-		{
-			*m_itWrite = ch;
-			++m_itWrite;
-		}
+		m_outStream.WriteChar(ch);
 	};
 
 	void Clear()
@@ -158,35 +141,34 @@ public:
 
 	std::optional<char> Read() override
 	{
-		std::optional<char> ch = std::nullopt;
-		if (m_itRead != m_stream.end())
-		{
-			ch = *m_itRead;
-			++m_itRead;
-		}
-		return ch;
+		return m_inStream.Read();
 	};
 
 	void ResetReadPos()
 	{
 		m_itRead = m_stream.begin();
+		m_inStream.Reset();
 	};
 
 	void ResetWritePos()
 	{
 		m_itWrite = m_stream.begin();
+		m_outStream.Reset();
 	};
 
 	void ResetAll()
 	{
-		m_itRead = m_stream.begin();
-		m_itWrite = m_stream.begin();
+		ResetReadPos();
+		ResetWritePos();
 	}
 
 private:
 	std::vector<char> m_stream = {};
 	std::vector<char>::iterator m_itRead = m_stream.begin();
 	std::vector<char>::iterator m_itWrite = m_stream.end();
+
+	MemoryOutputStream m_outStream = MemoryOutputStream(&m_stream);
+	MemoryInputStream m_inStream = MemoryInputStream(&m_stream);
 };
 
 // Записывает строку в output посимвольно
