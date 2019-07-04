@@ -52,7 +52,7 @@ public:
 		using value_type = std::conditional_t<IsConst, const Node, Node>;
 		using return_value_type = std::conditional_t<IsConst, const std::string, std::string>;
 		using reference = return_value_type&;
-		using pointer = value_type*;
+		using pointer = return_value_type*;
 		using difference_type = size_t;
 		using iterator_category = std::random_access_iterator_tag;
 
@@ -69,6 +69,13 @@ public:
 			return m_node->data;
 		}
 		
+		pointer operator->() const
+		{
+			assert(m_node);
+			assert(m_node->next);
+			return &(operator*());
+		}
+		
 		CIterator& operator++()
 		{
 			assert(m_node);
@@ -83,6 +90,24 @@ public:
 			assert(m_node->prev);
 			m_node = m_node->prev;
 			return *this;
+		}
+
+		CIterator& operator++(int)
+		{
+			assert(m_node);
+			assert(m_node->next);
+			CIterator copy(*this);
+			m_node = m_node->next;
+			return copy;
+		}
+
+		CIterator& operator--(int)
+		{
+			assert(m_node);
+			assert(m_node->prev);
+			CIterator copy(*this);
+			m_node = m_node->prev;
+			return copy;
 		}
 
 		size_t const operator-(CIterator const& other) const
@@ -116,9 +141,9 @@ public:
 
 
 	private:
-		pointer m_node = nullptr;
+		value_type* m_node = nullptr;
 
-		CIterator<IsConst>(pointer node)
+		CIterator<IsConst>(value_type* node)
 			: m_node(node)
 		{
 		}

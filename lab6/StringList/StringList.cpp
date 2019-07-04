@@ -146,15 +146,20 @@ std::string const& CStringList::GetFrontElement() const
 
 CStringList& CStringList::operator=(CStringList const& other)
 {
+	if (m_firstNode != other.m_firstNode)
+	{
 	CStringList copy(other);
 	Clear();
 	*this = std::move(copy);
+	}
 	
 	return *this;
 }
 
 CStringList& CStringList::operator=(CStringList&& other) noexcept
 {
+	Clear();
+
 	m_firstNode = other.m_firstNode;
 	m_size = other.m_size;
 
@@ -251,6 +256,7 @@ void CStringList::Remove(iterator pos)
 	{
 		temp->prev->next = temp->next;
 	}
+	delete temp;
 	--m_size;
 }
 
