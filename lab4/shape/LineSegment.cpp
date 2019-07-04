@@ -42,4 +42,6 @@ void CLineSegment::AppendProperties(std::ostream& strm) const
 
 void CLineSegment::Draw(ICanvas& canvas) const
 {
+	canvas.DrawLine(m_start, m_end, GetOutlineColor());
 }
+

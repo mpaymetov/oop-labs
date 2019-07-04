@@ -54,4 +54,11 @@ void CRectangle::AppendProperties(std::ostream& strm) const
 
 void CRectangle::Draw(ICanvas& canvas) const
 {
+	CPoint rigthTop = { m_leftTop.x + m_width, m_leftTop.y };
+	CPoint rigthBottom = { m_leftTop.x + m_width, m_leftTop.y + m_height };
+	CPoint leftBottom = { m_leftTop.x, m_leftTop.y + m_height };
+	std::vector<CPoint> points = { m_leftTop, rigthTop, rigthBottom, leftBottom };
+	
+	canvas.DrawPolygon(points, GetOutlineColor());
+	canvas.FillPolygon(points, GetFillColor());
 }

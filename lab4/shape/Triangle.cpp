@@ -43,4 +43,8 @@ void CTriangle::AppendProperties(std::ostream& strm) const
 
 void CTriangle::Draw(ICanvas& canvas) const
 {
+	std::vector<CPoint> points = { m_vertex1, m_vertex2, m_vertex3 };
+	canvas.DrawPolygon(points, GetOutlineColor());
+	canvas.FillPolygon(points, GetFillColor());
 }
+

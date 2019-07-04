@@ -5,11 +5,17 @@
 class CCanvas final : public ICanvas
 {
 public:
-	void DrawLine(CPoint const & from, CPoint const & to, std::string const & lineColor) override;
+	CCanvas(std::string const& outFileName);
+	~CCanvas();
 
-	void FillCircle(CPoint const & center, double radius, std::string const & fillColor) override;
-	void DrawCircle(CPoint const & center, double radius, std::string const & lineColor) override;
+	void DrawLine(CPoint const& from, CPoint const& to, uint32_t const& lineColor) override;
 
-	void FillPolygon(std::vector<CPoint> const & points, std::string const & fillColor) override;
-	void DrawPolygon(std::vector<CPoint> const & points, std::string const & lineColor) override;
+	void FillCircle(CPoint const& center, double radius, uint32_t const& fillColor) override;
+	void DrawCircle(CPoint const& center, double radius, uint32_t const& lineColor) override;
+
+	void FillPolygon(std::vector<CPoint> const& points, uint32_t const& fillColor) override;
+	void DrawPolygon(std::vector<CPoint> const& points, uint32_t const& lineColor) override;
+
+private:
+	std::ofstream m_outStream;
 };
