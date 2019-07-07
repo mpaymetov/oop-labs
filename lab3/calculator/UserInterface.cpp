@@ -64,7 +64,7 @@ bool CUserInterface::Let(std::istream& args)
 {
 	std::string identifier, valueStr, errorMsg;
 
-	std::regex regex("([^ ]+)=([^ ]+)");
+	std::regex regex(R"((\w+)=([\w.]+))");
 	std::string str;
 	std::cmatch result;
 	args >> str;
@@ -104,12 +104,17 @@ bool CUserInterface::Fn(std::istream& args)
 {
 	std::string identifier, firstOperand, mathOperatorStr, secondOperand, errorMsg;
 
-	std::regex regex("([^ ]+)=([^ ]+)([/+/-/*//])([^ ]*)");
+	std::regex regex(R"((\w+)=(\w+)([+-/*])?(\w*))");
 	std::string str;
 	std::cmatch result;
 	args >> str;
 	if (regex_match(str.c_str(), result, regex))
 	{
+		for (auto& res : result)
+		{
+			std::cout << "\"" << std::string(res.first, res.second) << "\"" << std::endl;
+		}
+
 		identifier = std::string(result[1].first, result[1].second);
 		firstOperand = std::string(result[2].first, result[2].second);
 		mathOperatorStr = std::string(result[3].first, result[3].second);
@@ -120,11 +125,6 @@ bool CUserInterface::Fn(std::istream& args)
 		m_output << "error in expression" << std::endl;
 		return true;
 	}
-
-	std::cout << "identifier: " << identifier << std::endl;
-	std::cout << "firstOperand: " << firstOperand << std::endl;
-	std::cout << "mathOperatorStr: " << mathOperatorStr << std::endl;
-	std::cout << "secondOperand: " << secondOperand << std::endl;
 
 	COperator mathOperator = GetMathOperator(mathOperatorStr);
 

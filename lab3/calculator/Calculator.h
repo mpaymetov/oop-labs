@@ -18,7 +18,7 @@ private:
 	std::map<std::string, std::shared_ptr<IValueRetriever>> m_names;
 	std::map<std::string, std::shared_ptr<CVariable>> m_vars;
 	std::map<std::string, std::shared_ptr<CFunction>> m_fns;
-	std::vector<std::shared_ptr<CFunction>> m_fns_update_list;
+	std::vector<std::shared_ptr<CFunction>> m_fnsUpdateList;
 
 	void UpdateFns();
 };
